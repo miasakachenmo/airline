@@ -10,22 +10,33 @@
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition  Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition  Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
             <StackPanel Height="200">
-                <TextBlock Text="已购" FontSize="20dip" HorizontalAlignment="Left" Margin="10"></TextBlock>
-                <Line X1="10" X2="1000" Y1="0" Y2="0" Stroke="Black" StrokeThickness="5"></Line>
+                <TextBlock Text="已购机票" FontSize="20dip" HorizontalAlignment="Left" Margin="10"></TextBlock>
+                <Line X1="10" X2="20000" Y1="0" Y2="0" Stroke="CornflowerBlue"  StrokeThickness="6"></Line>
             </StackPanel>
         </StackPanel>
         <StackPanel Grid.Column="1">
-            
-            <StackPanel Orientation="Horizontal">
-                <AutoSuggestBox ></AutoSuggestBox>
-                <Button Content="搜索" FontSize="20dip"  ></Button>
+            <StackPanel Height="60" >
+                <TextBlock Text="机票搜索" FontSize="20dip" HorizontalAlignment="Left" Margin="10"></TextBlock>
+                <Line X1="10" X2="2000" Y1="0" Y2="0" Stroke="CornflowerBlue" StrokeThickness="6"></Line>
             </StackPanel>
-           
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <AutoSuggestBox  PlaceholderText="星期几" BorderThickness="2"  Width="150"></AutoSuggestBox>
+                <TextBlock Text="从" FontSize="20"  Margin="5,0,5,0"></TextBlock>
+                <AutoSuggestBox  PlaceholderText="出发城市" BorderThickness="2"  Width="150"></AutoSuggestBox>
+                <TextBlock Text="到" FontSize="20"  Margin="5,0,5,0"></TextBlock>
+                <AutoSuggestBox PlaceholderText="目的城市" FontSize="40dip" BorderThickness="2"   Width="150"></AutoSuggestBox>
+                <Button Content="搜索" FontSize="13dip" Margin="5,0,0,0"></Button>
+            </StackPanel>
+            <TextBlock Text="热门航班" HorizontalAlignment="Center" FontSize="20" Margin="10,0,0,0"></TextBlock>
+            <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="17" Text="重庆-北京 北京-海口 齐齐哈尔-南阳 乌鲁木齐-重庆 哈尔滨-乌鲁木齐 重庆-长春 " Margin="0,10,0,0" ></TextBlock>
+            <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="17" Text="河南-长春  北京-海南  成都-北京  上海-广州   成都-深圳   北京-上海   长春-青岛 " ></TextBlock>
+            <TextBlock Text="您的信息" FontSize="20dip" HorizontalAlignment="Left" Margin="10"></TextBlock>
+            <Line X1="10" X2="2000" Y1="0" Y2="0" Stroke="CornflowerBlue" StrokeThickness="6"></Line>
         </StackPanel>
         <Line></Line>
     </Grid>

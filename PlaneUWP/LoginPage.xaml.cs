@@ -13,27 +13,23 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
+// https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
 namespace PlaneUWP
 {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class LoginPage : Page
     {
-        public static MainPage Instance;
-        public void JumpTo(String PageName)
+        public LoginPage()
         {
-            MyFrame.Navigate(Type.GetType("PlaneUWP."+PageName));
-        }
-        public MainPage()
-        {
-            Instance = this;
             this.InitializeComponent();
-            JumpTo("LoginPage");
-
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MainPage.Instance.JumpTo("UserMainPage");
+        }
     }
 }

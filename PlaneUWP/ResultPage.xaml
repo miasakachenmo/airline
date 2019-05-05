@@ -9,7 +9,11 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <ScrollViewer ViewChanged="ScrollViewer_ViewChanged">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="1" VerticalScrollMode="Enabled">
             <Grid Name="P">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition  Width="1*"></ColumnDefinition>
@@ -25,34 +29,34 @@
 
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Name="PlaneNumber">
-                    <TextBlock FontSize="30" Text="航班号" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="航班号" TextAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Name="CompName">
-                    <TextBlock FontSize="30" Text="公司名称" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="公司名称" TextAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Name="BeginPlace">
-                    <TextBlock FontSize="30" Text="起点" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="起点" TextAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="3" Name="ArrivePlace">
-                    <TextBlock FontSize="30" Text="终点" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="终点" TextAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="4" Name="BeginTime">
-                    <TextBlock FontSize="30" Text="起飞时间" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="起飞时间" TextAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="5" Name="ArriveTime">
-                    <TextBlock FontSize="30" Text="到达时间" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="到达时间" TextAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="6" Name="Mid">
-                    <TextBlock FontSize="30" Text="途经" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="途经" TextAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="7" Name="IsLate">
-                    <TextBlock FontSize="30" Text="是否晚点" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="是否晚点" TextAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="8" Name="LastTicket">
-                    <TextBlock FontSize="30" Text="余票" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="余票" TextAlignment="Center"></TextBlock>
                 </StackPanel>
-                <StackPanel Grid.Column="8" Name="Buy">
-                    <TextBlock FontSize="30" Text="购买" TextAlignment="Center"></TextBlock>
+                <StackPanel Grid.Column="9" Name="Buy">
+                    <TextBlock FontSize="20" Text="购买" TextAlignment="Center"></TextBlock>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

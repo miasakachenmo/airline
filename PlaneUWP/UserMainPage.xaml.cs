@@ -25,6 +25,7 @@ namespace PlaneUWP
         public UserMainPage()
         {
             this.InitializeComponent();
+            MyTicket.Navigate(Type.GetType("PlaneUWP."+"ResultPage"));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

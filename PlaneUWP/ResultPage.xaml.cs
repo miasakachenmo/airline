@@ -24,37 +24,49 @@ namespace PlaneUWP
     public sealed partial class ResultPage : Page
     {
         StackPanel[] stackPanels;
+        bool IsSearch = false;
         public void AddLine(string[] data)
         {
 
             for(int i=0;i<data.Length;i++)
             {
                 TextBlock textBlock = new TextBlock();
+                textBlock.Height = 25;
+
+                  
                 textBlock.HorizontalAlignment = HorizontalAlignment.Center;
-                textBlock.FontSize = 20;
+                textBlock.VerticalAlignment = VerticalAlignment.Center;
+                textBlock.Margin = new Thickness(0, 3, 0, 0);
+
+                textBlock.FontSize = 15;
                 textBlock.Text = data[i];
                 stackPanels[i].Children.Add(textBlock);
             }
-            Button button = new Button();
-            button.Content = "购票!";
-            button.Background = new SolidColorBrush(Colors.Azure);
-            Buy.Children.Add(button);
 
+            Button button = new Button();
+            button.FontSize = 12;
+            button.Height = 28;
+            button.Content = "购票!";
+            button.HorizontalAlignment = HorizontalAlignment.Center;
+            button.VerticalAlignment = VerticalAlignment.Top;
+            
+            Buy.Children.Add(button);
         }
         public ResultPage()
         {
             this.InitializeComponent();
             StackPanel[] t = { PlaneNumber, CompName, BeginPlace, ArrivePlace, BeginTime, ArriveTime, Mid, IsLate ,LastTicket};
             stackPanels = t;
-            string[] temps = { "A0001", "南方航空", "长春", "南阳", "13:40", "15:50", "无", "否" };
+            string[] temps = { "", "南方航空", "长春", "南阳", "13:40", "15:50", "无", "否","0" };
             for(int i=0;i<50;i++)
+            {
+                temps[0] = i.ToString();
                 AddLine(temps);
+            }
+
 
         }
 
-        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-        {
 
-        }
     }
 }

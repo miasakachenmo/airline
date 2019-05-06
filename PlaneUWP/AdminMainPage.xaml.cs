@@ -1,5 +1,4 @@
-﻿using PlaneUWP.ToolClass;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,30 +13,26 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
+// https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
 namespace PlaneUWP
 {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class AdminMainPage : Page
     {
-        public static MainPage Instance;
-        public void JumpTo(String PageName)
+        public AdminMainPage()
         {
-            MyFrame.Navigate(Type.GetType("PlaneUWP."+PageName));
-        }
-        public void JumpTo(String PageName,Object Pra)
-        {
-            MyFrame.Navigate(Type.GetType("PlaneUWP." + PageName),Pra);
-        }
-        public MainPage()
-        {
-            Instance = this;
             this.InitializeComponent();
-            JumpTo("AdminMainPage");
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ResultPage.ResultParam param = new ResultPage.ResultParam();
+            //param.airLines =QueryAirline(BeginCityText.Text, ArriveCityText.Text, DateText.Text);
+            param.type = ResultPage.PageType.UserSearchPage;
+            MainPage.Instance.JumpTo("ResultPage", param);
+        }
     }
 }

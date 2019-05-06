@@ -56,7 +56,7 @@
                     <TextBlock FontSize="20" Text="余票" TextAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="9" Name="Buy">
-                    <TextBlock FontSize="20" Text="购买" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="操作" TextAlignment="Center"></TextBlock>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

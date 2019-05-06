@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlaneUWP.ToolClass;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,11 +28,17 @@ namespace PlaneUWP
         {
             MyFrame.Navigate(Type.GetType("PlaneUWP."+PageName));
         }
+        public void JumpTo(String PageName,Object Pra)
+        {
+            MyFrame.Navigate(Type.GetType("PlaneUWP." + PageName),Pra);
+        }
         public MainPage()
         {
+
             Instance = this;
             this.InitializeComponent();
             JumpTo("LoginPage");
+            
 
         }
 

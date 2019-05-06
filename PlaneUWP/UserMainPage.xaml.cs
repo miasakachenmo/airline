@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PlaneUWP.ToolClass;
+using System;
+
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,15 +24,25 @@ namespace PlaneUWP
     /// </summary>
     public sealed partial class UserMainPage : Page
     {
+        
+        string Date;
+        string BeginCity;
+        string ArriveCity;
         public UserMainPage()
+
         {
+            
             this.InitializeComponent();
-            MyTicket.Navigate(Type.GetType("PlaneUWP."+"ResultPage"));
+            //MyTicket.Navigate(Type.GetType("PlaneUWP."+"ResultPage"),ResultPage.PageType.UserMessagePage);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainPage.Instance.JumpTo("ResultPage");
+
+            ResultPage.ResultParam param = new ResultPage.ResultParam();
+            param.airLines=new DataBase().QueryAirline(BeginCityText.Text, ArriveCityText.Text, DateText.Text);
+            param.type = ResultPage.PageType.UserSearchPage;
+            MainPage.Instance.JumpTo("ResultPage",param);
         }
     }
 }

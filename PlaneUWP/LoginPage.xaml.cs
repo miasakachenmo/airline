@@ -26,6 +26,10 @@ namespace PlaneUWP
         {
             this.InitializeComponent();
         }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

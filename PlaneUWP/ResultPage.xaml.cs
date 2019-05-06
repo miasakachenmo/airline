@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlaneUWP.ToolClass;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,8 +24,34 @@ namespace PlaneUWP
     /// </summary>
     public sealed partial class ResultPage : Page
     {
+        List<AirLine> airLines;
         StackPanel[] stackPanels;
-        bool IsSearch = false;
+
+        
+        PageType type;
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            
+            base.OnNavigatedTo(e);
+            type = ((ResultParam)e.Parameter).type;
+            airLines= ((ResultParam)e.Parameter).airLines;
+        }
+
+        public enum PageType {UserMessagePage,UserSearchPage,AdminSearchPage};
+        public class ResultParam
+        {
+
+            public List<AirLine> airLines;
+            public PageType type;
+
+        }
+        public void AddLine(AirLine airLine)
+        {
+            // PlaneNumber, CompName, BeginPlace, ArrivePlace, BeginTime, ArriveTime, Mid, IsLate ,LastTicket
+            string[] temp = { airLine.airlinenum, airLine.comp, airLine.begincity, airLine.arrivecity, airLine.begintime, airLine.arrivetime,"无" ,airLine.status.islate?"是":"否",airLine.remainticket};
+            AddLine(temp);
+        }
         public void AddLine(string[] data)
         {
 
@@ -46,25 +73,52 @@ namespace PlaneUWP
             Button button = new Button();
             button.FontSize = 12;
             button.Height = 28;
-            button.Content = "购票!";
+            
             button.HorizontalAlignment = HorizontalAlignment.Center;
             button.VerticalAlignment = VerticalAlignment.Top;
-            
+            switch(type)
+            {
+                case PageType.UserSearchPage:
+                    button.Content = "购票!";
+                    button.Click += ButtonBuy;
+                    break;
+                case PageType.UserMessagePage:
+                    button.Content = "退票";
+                    button.Click += ButtonCancel;
+                    break;
+                case PageType.AdminSearchPage:
+                    button.Content = "操作";
+                    button.Click += ButtonLate;
+                    break;
+                    
+            }
+
+
             Buy.Children.Add(button);
         }
+        public void ButtonBuy(object sender, RoutedEventArgs e)//买票
+        {
+
+        }
+        public void ButtonCancel(object sender, RoutedEventArgs e)//退票
+        {
+
+        }
+        public void ButtonLate(object sender, RoutedEventArgs e)//管理员设置延误或取消
+        {
+
+        }
+
         public ResultPage()
         {
             this.InitializeComponent();
             StackPanel[] t = { PlaneNumber, CompName, BeginPlace, ArrivePlace, BeginTime, ArriveTime, Mid, IsLate ,LastTicket};
             stackPanels = t;
-            string[] temps = { "", "南方航空", "长春", "南阳", "13:40", "15:50", "无", "否","0" };
-            for(int i=0;i<50;i++)
+            
+            foreach(AirLine airLine in airLines)
             {
-                temps[0] = i.ToString();
-                AddLine(temps);
+                AddLine(airLine);
             }
-
-
         }
 
 

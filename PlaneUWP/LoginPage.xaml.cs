@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlaneUWP.ToolClass;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace PlaneUWP
         public LoginPage()
         {
             this.InitializeComponent();
+            Pass.Text = DataBase.Instence.GetPassWord("admin");
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

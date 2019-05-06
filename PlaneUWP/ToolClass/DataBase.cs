@@ -8,9 +8,23 @@ using System.Data;
 
 namespace PlaneUWP.ToolClass
 {
-    class DataBase
+    public class DataBase
     {
-        
+        private static DataBase instence;
+        public static DataBase Instence
+        {
+            get
+            {
+                if (instence == null)
+                    instence = new DataBase();
+                return instence;
+            }
+            set
+            {
+                instence = value;
+            }
+        }
+
         string ConnectString = "server=119.23.219.88;port=3306;user=airline;password=123;database=airline;";
 
         public AirLine.Status GetStatus(string AirLineNum,string Date)
@@ -64,10 +78,12 @@ namespace PlaneUWP.ToolClass
             return airLines;
         }
 
+ 
+
+
         //用户买票
         public void AddTicket(string UserId,string AirlineId,string Date)
         {
-
         }
 
 
@@ -98,13 +114,46 @@ namespace PlaneUWP.ToolClass
         //用户类型,是否是管理员,是的话返回true
         public bool IsAdmin(string Userid)
         {
+            string str = $"select usertype from user where userid=\"{Userid}\"";
+            MySqlDataReader mySqlDataReader = Execute(str);
+            mySqlDataReader.Read();
+            string type=mySqlDataReader.GetString("usertype");
+            mySqlDataReader.Close();
+            if (type == "1")
+                return true;
             return false;
+        }
+        
+        //判断密码
+        public bool isPassword(string Userid,string Password)
+        {
+            string str = $"select password from user where userid=\"{Userid}\"";
+            MySqlDataReader mySqlDataReader = Execute(str);
+            if (!mySqlDataReader.Read())
+                return false;
+            else
+            {
+                string tempo = mySqlDataReader.GetString("password");
+                if (tempo == Password)
+                    return true;
+                else
+                    return false;
+            }
         }
 
         //用户密码
         public string GetPassWord(String Userid)
         {
-            return "";
+            string str = $"select password from user where userid=\"{Userid}\"";
+            MySqlDataReader reader = Execute(str);
+            if (!reader.Read())
+            {
+                reader.Close();
+                return "";
+            }
+            string password = reader.GetString("password");
+            reader.Close();
+            return password;
         }
         public MySqlDataReader Execute(string Command)
         {
@@ -112,6 +161,7 @@ namespace PlaneUWP.ToolClass
         }
 
         MySqlConnection sqlConnection;
+
 
         public  DataBase()
         {

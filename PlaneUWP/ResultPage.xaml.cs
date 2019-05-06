@@ -29,6 +29,7 @@ namespace PlaneUWP
 
         
         PageType type;
+        
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -36,6 +37,10 @@ namespace PlaneUWP
             base.OnNavigatedTo(e);
             type = ((ResultParam)e.Parameter).type;
             airLines= ((ResultParam)e.Parameter).airLines;
+            foreach (AirLine airLine in airLines)
+            {
+                AddLine(airLine);
+            }
         }
 
         public enum PageType {UserMessagePage,UserSearchPage,AdminSearchPage};
@@ -114,11 +119,6 @@ namespace PlaneUWP
             this.InitializeComponent();
             StackPanel[] t = { PlaneNumber, CompName, BeginPlace, ArrivePlace, BeginTime, ArriveTime, Mid, IsLate ,LastTicket};
             stackPanels = t;
-            
-            foreach(AirLine airLine in airLines)
-            {
-                AddLine(airLine);
-            }
         }
 
 

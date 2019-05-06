@@ -42,6 +42,7 @@ namespace PlaneUWP
             ResultPage.ResultParam param = new ResultPage.ResultParam();
             param.airLines=new DataBase().QueryAirline(BeginCityText.Text, ArriveCityText.Text, DateText.Text);
             param.type = ResultPage.PageType.UserSearchPage;
+
             MainPage.Instance.JumpTo("ResultPage",param);
         }
     }

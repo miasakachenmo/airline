@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 
-namespace PlaneUWP.ToolClass
+namespace PlaneUWP
 {
     public class DataBase
     {
@@ -61,7 +61,6 @@ namespace PlaneUWP.ToolClass
                 AirLine newAirLine = new AirLine();
                 newAirLine.arrivetime = mySqlDataReader.GetString("arrivetime");
                 newAirLine.date = mySqlDataReader.GetString("date");
-                
                 newAirLine.comp= mySqlDataReader.GetString("comp");
                 newAirLine.airlinenum = mySqlDataReader.GetString("airlinenum");
                 newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");

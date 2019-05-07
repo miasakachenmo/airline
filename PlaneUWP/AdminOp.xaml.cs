@@ -13,28 +13,27 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
+//https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
 
 namespace PlaneUWP
 {
-    /// <summary>
-    /// 可用于自身或导航至 Frame 内部的空白页。
-    /// </summary>
-    public sealed partial class LoginPage : Page
+    public sealed partial class AdminOp : UserControl
     {
-        public LoginPage()
+        ContentDialog father;
+        public AdminOp(ContentDialog contentDialog)
         {
             this.InitializeComponent();
-            Pass.Text = DataBase.Instence.GetPassWord("admin");
-        }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
+            father = contentDialog;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click_Cancel(object sender, RoutedEventArgs e)
         {
-            MainPage.Instance.JumpTo("UserMainPage");
+            father.Hide();
+        }
+
+        private void Button_Click_Late(object sender, RoutedEventArgs e)
+        {
+            father.Hide();
         }
     }
 }

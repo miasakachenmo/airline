@@ -1,4 +1,4 @@
-﻿using PlaneUWP.ToolClass;
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,10 +37,11 @@ namespace PlaneUWP
             base.OnNavigatedTo(e);
             type = ((ResultParam)e.Parameter).type;
             airLines= ((ResultParam)e.Parameter).airLines;
-            foreach (AirLine airLine in airLines)
-            {
-                AddLine(airLine);
-            }
+
+        //    foreach (AirLine airLine in airLines)
+          //  {
+            //    AddLine(airLine);
+            //}
         }
 
         public enum PageType {UserMessagePage,UserSearchPage,AdminSearchPage};
@@ -55,11 +56,11 @@ namespace PlaneUWP
         {
             // PlaneNumber, CompName, BeginPlace, ArrivePlace, BeginTime, ArriveTime, Mid, IsLate ,LastTicket
             string[] temp = { airLine.airlinenum, airLine.comp, airLine.begincity, airLine.arrivecity, airLine.begintime, airLine.arrivetime,"无" ,airLine.status.islate?"是":"否",airLine.remainticket};
-            AddLine(temp);
+            AddLine(temp,airLine);
         }
-        public void AddLine(string[] data)
+        public void AddLine(string[] data,AirLine airLine)
         {
-
+            
             for(int i=0;i<data.Length;i++)
             {
                 TextBlock textBlock = new TextBlock();
@@ -72,10 +73,14 @@ namespace PlaneUWP
 
                 textBlock.FontSize = 15;
                 textBlock.Text = data[i];
+                if (i == 1)
+                    textBlock.FontSize = 10;
                 stackPanels[i].Children.Add(textBlock);
             }
-
-            Button button = new Button();
+            
+            
+            AirLineButton button = new AirLineButton(airLine);
+            
             button.FontSize = 12;
             button.Height = 28;
             
@@ -109,16 +114,27 @@ namespace PlaneUWP
         {
 
         }
-        public void ButtonLate(object sender, RoutedEventArgs e)//管理员设置延误或取消
+        public async void ButtonLate(object sender, RoutedEventArgs e)//管理员设置延误或取消
         {
-
+            AirLineButton temp = (AirLineButton)sender;
+            var contentDialog = new ContentDialog()
+            {
+                Title=$"输入你希望对{temp.airLine.date}航班{temp.airLine.airlinenum}进行的操作",
+                FullSizeDesired = false
+            };
+            
+            contentDialog.Content = new AdminOp(contentDialog);
+            await contentDialog.ShowAsync();
+            
         }
+        public string haha = "haha";
 
         public ResultPage()
         {
             this.InitializeComponent();
-            StackPanel[] t = { PlaneNumber, CompName, BeginPlace, ArrivePlace, BeginTime, ArriveTime, Mid, IsLate ,LastTicket};
-            stackPanels = t;
+            this.DataContext = this;
+            //StackPanel[] t = { PlaneNumber, CompName, BeginPlace, ArrivePlace, BeginTime, ArriveTime, Mid, IsLate ,LastTicket};
+            //stackPanels = t;
         }
 
 

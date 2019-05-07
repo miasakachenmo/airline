@@ -7,14 +7,48 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            
+            <DataTemplate x:Key="AirLineTemplate" x:DataType="local:AirLine">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{x:Bind airlinenum}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{x:Bind comp}" FontSize="10" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="{x:Bind begincity}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Text="{x:Bind arrivecity}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="4" Text="{x:Bind begintime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="5" Text="{x:Bind arrivetime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="6" Text="否" FontSize="15" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="7" Text="{x:Bind islatestr}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="8" Text="{x:Bind remainticket}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+            </DataTemplate>
+            
+        </ResourceDictionary>
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="1" VerticalScrollMode="Enabled">
+        <ScrollViewer Grid.Row="1">
             <Grid Name="P">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition  Width="1*"></ColumnDefinition>
                     <ColumnDefinition  Width="1*"></ColumnDefinition>
@@ -26,7 +60,6 @@
                     <ColumnDefinition  Width="1*"></ColumnDefinition>
                     <ColumnDefinition  Width="1*"></ColumnDefinition>
                     <ColumnDefinition  Width="1*"></ColumnDefinition>
-
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Name="PlaneNumber">
                     <TextBlock FontSize="20" Text="航班号" TextAlignment="Center"></TextBlock>
@@ -56,8 +89,9 @@
                     <TextBlock FontSize="20" Text="余票" TextAlignment="Center"></TextBlock>
                 </StackPanel>
                 <StackPanel Grid.Column="9" Name="Buy">
-                    <TextBlock FontSize="20" Text="操作" TextAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="20" Text="{x:Bind haha, Mode=TwoWay}" TextAlignment="Center"></TextBlock>
                 </StackPanel>
+                <ListBox Grid.Row="1" Grid.ColumnSpan="9" ItemsSource="{x:Bind airLines}" BorderBrush="{x:Null}" ItemTemplate="{StaticResource AirLineTemplate}"></ListBox>
             </Grid>
         </ScrollViewer>
         

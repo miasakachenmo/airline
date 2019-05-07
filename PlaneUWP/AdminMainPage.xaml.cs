@@ -26,13 +26,17 @@ namespace PlaneUWP
         {
             this.InitializeComponent();
         }
-
+        private void Create_AirLine(object sender, RoutedEventArgs e)
+        {
+            
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             ResultPage.ResultParam param = new ResultPage.ResultParam();
-            //param.airLines =QueryAirline(BeginCityText.Text, ArriveCityText.Text, DateText.Text);
-            param.type = ResultPage.PageType.UserSearchPage;
-            MainPage.Instance.JumpTo("ResultPage", param);
+            
+            param.airLines = DataBase.Instence.QueryAirline(BeginCityText.Text, ArriveCityText.Text, DateText.Text);
+            param.type = ResultPage.PageType.AdminSearchPage;
+            DataPresenter.Navigate(Type.GetType("PlaneUWP.ResultPage"), param);
         }
     }
 }

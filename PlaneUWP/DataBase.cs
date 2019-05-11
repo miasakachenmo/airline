@@ -25,6 +25,8 @@ namespace PlaneUWP
             }
         }
 
+        string ConnectStringLocal = "server=localhost;port=3306;user=airline;password=1234;database=airline;";
+
         string ConnectString = "server=119.23.219.88;port=3306;user=airline;password=123;database=airline;";
 
         public AirLine.Status GetStatus(string AirLineNum,string Date)
@@ -165,12 +167,8 @@ namespace PlaneUWP
         public  DataBase()
         {
 
-            sqlConnection = new MySqlConnection(ConnectString);
-
+            sqlConnection = new MySqlConnection(ConnectStringLocal);
             sqlConnection.Open();
-            
-            
-            
             
         }
     }

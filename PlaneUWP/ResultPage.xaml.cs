@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -33,15 +34,19 @@ namespace PlaneUWP
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+       App.Instance.rootFrame.CanGoBack ?
+       AppViewBackButtonVisibility.Visible :
+       AppViewBackButtonVisibility.Collapsed;
+
             base.OnNavigatedTo(e);
             type = ((ResultParam)e.Parameter).type;
             airLines= ((ResultParam)e.Parameter).airLines;
 
-        //    foreach (AirLine airLine in airLines)
-          //  {
-            //    AddLine(airLine);
-            //}
+            foreach (AirLine airLine in airLines)
+            {
+                airLine.itemType = type;
+            }
         }
 
         public enum PageType {UserMessagePage,UserSearchPage,AdminSearchPage};
@@ -52,6 +57,7 @@ namespace PlaneUWP
             public PageType type;
 
         }
+        /*
         public void AddLine(AirLine airLine)
         {
             // PlaneNumber, CompName, BeginPlace, ArrivePlace, BeginTime, ArriveTime, Mid, IsLate ,LastTicket
@@ -104,7 +110,7 @@ namespace PlaneUWP
             }
 
 
-            Buy.Children.Add(button);
+            //Buy.Children.Add(button);
         }
         public void ButtonBuy(object sender, RoutedEventArgs e)//买票
         {
@@ -127,16 +133,28 @@ namespace PlaneUWP
             await contentDialog.ShowAsync();
             
         }
-        public string haha = "haha";
+        */
 
         public ResultPage()
         {
             this.InitializeComponent();
             this.DataContext = this;
+
             //StackPanel[] t = { PlaneNumber, CompName, BeginPlace, ArrivePlace, BeginTime, ArriveTime, Mid, IsLate ,LastTicket};
             //stackPanels = t;
         }
-
-
+        
+        private async void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            AirLine temp = (AirLine)e.ClickedItem;
+            var contentDialog = new ContentDialog()
+            {
+                CloseButtonText = "关闭",
+                Title = $"输入你希望对{temp.date}航班{temp.airlinenum}进行的操作",
+                FullSizeDesired = false
+            };
+            contentDialog.Content = new AdminOp(contentDialog,temp);
+            await contentDialog.ShowAsync();
+        }
     }
 }

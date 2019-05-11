@@ -43,59 +43,52 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="1">
-            <Grid Name="P">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition  Width="1*"></ColumnDefinition>
-                    <ColumnDefinition  Width="1*"></ColumnDefinition>
-                    <ColumnDefinition  Width="1*"></ColumnDefinition>
-                    <ColumnDefinition  Width="1*"></ColumnDefinition>
-                    <ColumnDefinition  Width="1*"></ColumnDefinition>
-                    <ColumnDefinition  Width="1*"></ColumnDefinition>
-                    <ColumnDefinition  Width="1*"></ColumnDefinition>
-                    <ColumnDefinition  Width="1*"></ColumnDefinition>
-                    <ColumnDefinition  Width="1*"></ColumnDefinition>
-                    <ColumnDefinition  Width="1*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Name="PlaneNumber">
-                    <TextBlock FontSize="20" Text="航班号" TextAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Name="CompName">
-                    <TextBlock FontSize="20" Text="公司名称" TextAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Name="BeginPlace">
-                    <TextBlock FontSize="20" Text="起点" TextAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="3" Name="ArrivePlace">
-                    <TextBlock FontSize="20" Text="终点" TextAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="4" Name="BeginTime">
-                    <TextBlock FontSize="20" Text="起飞时间" TextAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="5" Name="ArriveTime">
-                    <TextBlock FontSize="20" Text="到达时间" TextAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="6" Name="Mid">
-                    <TextBlock FontSize="20" Text="途经" TextAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="7" Name="IsLate">
-                    <TextBlock FontSize="20" Text="是否晚点" TextAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="8" Name="LastTicket">
-                    <TextBlock FontSize="20" Text="余票" TextAlignment="Center"></TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="9" Name="Buy">
-                    <TextBlock FontSize="20" Text="{x:Bind haha, Mode=TwoWay}" TextAlignment="Center"></TextBlock>
-                </StackPanel>
-                <ListBox Grid.Row="1" Grid.ColumnSpan="9" ItemsSource="{x:Bind airLines}" BorderBrush="{x:Null}" ItemTemplate="{StaticResource AirLineTemplate}"></ListBox>
-            </Grid>
-        </ScrollViewer>
-        
-            
-       
+        <Grid Name="P" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition  Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Name="PlaneNumber">
+                <TextBlock FontSize="20" Text="航班号" TextAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Name="CompName">
+                <TextBlock FontSize="20" Text="公司名称" TextAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Name="BeginPlace">
+                <TextBlock FontSize="20" Text="起点" TextAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="3" Name="ArrivePlace">
+                <TextBlock FontSize="20" Text="终点" TextAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="4" Name="BeginTime">
+                <TextBlock FontSize="20" Text="起飞时间" TextAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="5" Name="ArriveTime">
+                <TextBlock FontSize="20" Text="到达时间" TextAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="6" Name="Mid">
+                <TextBlock FontSize="20" Text="途经" TextAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="7" Name="IsLate">
+                <TextBlock FontSize="20" Text="是否晚点" TextAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="8" Name="LastTicket">
+                <TextBlock FontSize="20" Text="余票" TextAlignment="Center"></TextBlock>
+            </StackPanel>
+        </Grid>
+        <ListView IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Grid.Row="1" Grid.ColumnSpan="8" Background="White" ItemsSource="{x:Bind airLines}" BorderBrush="{x:Null}" ItemTemplate="{StaticResource AirLineTemplate}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
     </Grid>
 </Page>

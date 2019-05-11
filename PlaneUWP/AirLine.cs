@@ -21,6 +21,11 @@ namespace PlaneUWP
 
         public string date;
         public Status status;
+
+
+
+        public ResultPage.PageType itemType;
+
         public string islatestr
         {
             get

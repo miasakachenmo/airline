@@ -14,9 +14,9 @@
         <StackPanel VerticalAlignment="Bottom">
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  >
-                <Button Click="Button_Click_Cancel" Content="取消航班" HorizontalAlignment="Center" Margin="0,0,20,0" ></Button>
-                <RichEditBox PlaceholderText="延误时间" Name="LateTime"></RichEditBox>
-                <Button Click="Button_Click_Late" Margin="10,0,0,0" Content="延误航班"></Button>
+                <Button Width="100" Name="AButton"  Content="取消航班" HorizontalAlignment="Center" Margin="0,0,20,0" ></Button>
+                <RichEditBox Name="Input" PlaceholderText="延误时间"></RichEditBox>
+                <Button Width="100" Name="BButton"  Margin="10,0,0,0" Content="延误航班"></Button>
             </StackPanel>
         </StackPanel>
 

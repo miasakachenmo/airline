@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 
-namespace PlaneUWP.ToolClass
+namespace PlaneUWP
 {
     public class DataBase
     {
@@ -24,6 +24,8 @@ namespace PlaneUWP.ToolClass
                 instence = value;
             }
         }
+
+        string ConnectStringLocal = "server=localhost;port=3306;user=airline;password=1234;database=airline;";
 
         string ConnectString = "server=119.23.219.88;port=3306;user=airline;password=123;database=airline;";
 
@@ -61,7 +63,6 @@ namespace PlaneUWP.ToolClass
                 AirLine newAirLine = new AirLine();
                 newAirLine.arrivetime = mySqlDataReader.GetString("arrivetime");
                 newAirLine.date = mySqlDataReader.GetString("date");
-                
                 newAirLine.comp= mySqlDataReader.GetString("comp");
                 newAirLine.airlinenum = mySqlDataReader.GetString("airlinenum");
                 newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");
@@ -223,12 +224,8 @@ namespace PlaneUWP.ToolClass
         public  DataBase()
         {
 
-            sqlConnection = new MySqlConnection(ConnectString);
-
+            sqlConnection = new MySqlConnection(ConnectStringLocal);
             sqlConnection.Open();
-            
-            
-            
             
         }
     }

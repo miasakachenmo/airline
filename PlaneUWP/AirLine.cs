@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlaneUWP.ToolClass
+namespace PlaneUWP
 {
     public class AirLine
     {
@@ -21,6 +21,18 @@ namespace PlaneUWP.ToolClass
 
         public string date;
         public Status status;
+
+
+
+        public ResultPage.PageType itemType;
+
+        public string islatestr
+        {
+            get
+            {
+                return status.islate ? "是" : "否";
+            }
+        }
         public class Status
         {
             public bool islate=false;

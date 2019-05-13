@@ -1,4 +1,4 @@
-﻿using PlaneUWP.ToolClass;
+﻿
 using System;
 
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -33,7 +34,13 @@ namespace PlaneUWP
         {
             
             this.InitializeComponent();
+            //Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += UserMainPage_BackRequested; ;
             //MyTicket.Navigate(Type.GetType("PlaneUWP."+"ResultPage"),ResultPage.PageType.UserMessagePage);
+        }
+
+        private void UserMainPage_BackRequested(object sender, Windows.UI.Core.BackRequestedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -43,7 +50,15 @@ namespace PlaneUWP
             param.airLines=new DataBase().QueryAirline(BeginCityText.Text, ArriveCityText.Text, DateText.Text);
             param.type = ResultPage.PageType.UserSearchPage;
 
-            MainPage.Instance.JumpTo("ResultPage",param);
+            App.Instance.JumpTo("ResultPage",param);
+        }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+            App.Instance.rootFrame.CanGoBack ?
+            AppViewBackButtonVisibility.Visible :
+            AppViewBackButtonVisibility.Collapsed;
+            base.OnNavigatedTo(e);
         }
     }
 }

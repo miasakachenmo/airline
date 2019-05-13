@@ -14,7 +14,10 @@
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <Line  Grid.Column="0" HorizontalAlignment="Right" Stroke="BlueViolet" X1="0" X2="0" Y1="0" Y2="3000"></Line>
+
         <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            
             <TextBlock Text="欢迎,管理员" Margin="0,0,0,10" TextAlignment="Center" FontSize="40"></TextBlock>
             <TextBlock Text="请输入想要管理的航班信息" TextAlignment="Center" Margin="0,0,0,10"></TextBlock>
 
@@ -24,10 +27,10 @@
                 <AutoSuggestBox Name="BeginCityText" PlaceholderText="出发城市" BorderThickness="2"  Width="100"></AutoSuggestBox>
                 <TextBlock Text="到" FontSize="20"  Margin="5,0,5,0" HorizontalAlignment="Center"></TextBlock>
                 <AutoSuggestBox  Name="ArriveCityText" PlaceholderText="目的城市" FontSize="40dip" BorderThickness="2"   Width="100"></AutoSuggestBox>
-                <Button Click="Button_Click" Height="34" Margin="5,0,5,0" Content="搜索" FontSize="13dip" HorizontalAlignment="Center" ></Button>
+                <Button Click="Button_Click" Height="34" Width="90" Margin="5,0,5,0" Content="搜索" FontSize="13dip" HorizontalAlignment="Center" ></Button>
+                <Button Click="Create_AirLine" Height="34"  Width="90" Margin="5,20,5,0" Content="创建航线" HorizontalAlignment="Center"></Button>
             </StackPanel>
         </StackPanel>
-        <Line Grid.Column="1" Stroke="BlueViolet" X1="0" X2="0" Y1="0" Y2="3000"></Line>
         <Frame Name="DataPresenter" Grid.Column="1"></Frame>
     </Grid>
 </Page>

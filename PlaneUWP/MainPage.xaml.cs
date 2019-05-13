@@ -1,4 +1,4 @@
-﻿using PlaneUWP.ToolClass;
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,19 +24,26 @@ namespace PlaneUWP
     public sealed partial class MainPage : Page
     {
         public static MainPage Instance;
+        public Frame root;
         public void JumpTo(String PageName)
         {
-            MyFrame.Navigate(Type.GetType("PlaneUWP."+PageName));
+            root.Navigate(Type.GetType("PlaneUWP."+PageName));
         }
         public void JumpTo(String PageName,Object Pra)
         {
-            MyFrame.Navigate(Type.GetType("PlaneUWP." + PageName),Pra);
+            root.Navigate(Type.GetType("PlaneUWP." + PageName),Pra);
         }
         public MainPage()
         {
+            
             Instance = this;
+            root=App.Instance.rootFrame;
             this.InitializeComponent();
-            JumpTo("AdminMainPage");
+            App.Instance.JumpTo("UserMainPage");
+        }
+        public void Back_Click(object sender,RoutedEventArgs e)
+        {
+
         }
 
     }

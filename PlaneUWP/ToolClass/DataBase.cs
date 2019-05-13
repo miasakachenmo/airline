@@ -41,7 +41,7 @@ namespace PlaneUWP.ToolClass
                         status.newtime = mySqlDataReader.GetString("time");
                         break;
                     case "canceled":
-                        status.iscanceled = false;
+                        status.iscanceled = true;
                         break;
                 }
             }
@@ -82,8 +82,30 @@ namespace PlaneUWP.ToolClass
 
 
         //用户买票
-        public void AddTicket(string UserId,string AirlineId,string Date)
+        public bool AddTicket(string UserId,string AirlineId,string Date)
         {
+            string tempo = $"select * from  buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{UserId}\"";
+            MySqlDataReader mySqlDataReader = Execute(tempo);
+            if (mySqlDataReader.Read())
+            {
+                mySqlDataReader.Close();
+                return false;
+            }
+            else
+            {
+                mySqlDataReader.Close();
+                string tempo_1= $"UPDATE airline SET remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+                ExecuteNoQuery(tempo_1);
+                AirLine.Status status = new AirLine.Status();
+                status = GetStatus(AirlineId, Date);
+                string final_status="";
+                if (status.islate)
+                    final_status = "late";
+                string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",\"{final_status}\")";
+                ExecuteNoQuery(tempo_2);
+                return true;
+            }
+
         }
 
 
@@ -102,13 +124,43 @@ namespace PlaneUWP.ToolClass
         //航班取消
         public void AirlineCanael(string AirlineId,string Date)
         {
-
+            string tempo = $"select * from airlinestatus where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            MySqlDataReader mySqlDataReader = Execute(tempo);
+            if (mySqlDataReader.Read())
+            {
+                string str = $"UPDATE airlinestatus SET status='canceled' where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+                mySqlDataReader.Close();
+                ExecuteNoQuery(str);
+                return;
+            }
+            else
+            {
+                mySqlDataReader.Close();
+                string str = $"INSERT INTO airlinestatus (airlinenum,date,status,time) VALUES (\"{AirlineId}\",\"{Date}\" ,'canceled','')";
+                ExecuteNoQuery(str);
+                return;
+            }
         }
 
         //航班延误
         public void AirlineLate(string AirlineId,string LateTime,string Date)
         {
-
+            string tempo = $"select * from airlinestatus where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            MySqlDataReader mySqlDataReader = Execute(tempo);
+            if(mySqlDataReader.Read())
+            {
+                string str = $"update airlinestatus set time=\"{LateTime}\"where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+                mySqlDataReader.Close();
+                ExecuteNoQuery(str);
+                return;
+            }
+            else
+            {
+                mySqlDataReader.Close();
+                string str = $"INSERT INTO airlinestatus (airlinenum,date,status,time) VALUES (\"{AirlineId}\",\"{Date}\" ,'late',\"{LateTime}\")";
+                ExecuteNoQuery(str);
+                return;
+            }
         }
 
         //用户类型,是否是管理员,是的话返回true
@@ -158,6 +210,11 @@ namespace PlaneUWP.ToolClass
         public MySqlDataReader Execute(string Command)
         {
             return new MySqlCommand(Command, sqlConnection).ExecuteReader();
+        }
+        public void ExecuteNoQuery(string Command)
+        {
+            new MySqlCommand(Command, sqlConnection).ExecuteNonQuery();
+
         }
 
         MySqlConnection sqlConnection;

@@ -34,10 +34,6 @@ namespace PlaneUWP
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
-       App.Instance.rootFrame.CanGoBack ?
-       AppViewBackButtonVisibility.Visible :
-       AppViewBackButtonVisibility.Collapsed;
 
             base.OnNavigatedTo(e);
             type = ((ResultParam)e.Parameter).type;

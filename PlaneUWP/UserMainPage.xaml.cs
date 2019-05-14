@@ -34,8 +34,6 @@ namespace PlaneUWP
         {
             
             this.InitializeComponent();
-            //Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += UserMainPage_BackRequested; ;
-            //MyTicket.Navigate(Type.GetType("PlaneUWP."+"ResultPage"),ResultPage.PageType.UserMessagePage);
         }
 
         private void UserMainPage_BackRequested(object sender, Windows.UI.Core.BackRequestedEventArgs e)
@@ -54,11 +52,10 @@ namespace PlaneUWP
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
-            App.Instance.rootFrame.CanGoBack ?
-            AppViewBackButtonVisibility.Visible :
-            AppViewBackButtonVisibility.Collapsed;
+            var a = App.Instance.rootFrame.BackStackDepth;
             base.OnNavigatedTo(e);
+            var b = App.Instance.rootFrame.BackStackDepth;
+
         }
     }
 }

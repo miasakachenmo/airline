@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,19 +23,67 @@ namespace PlaneUWP
     /// </summary>
     public sealed partial class LoginPage : Page
     {
+        public int Debug = 0;
         public LoginPage()
         {
             this.InitializeComponent();
-            Pass.Text = DataBase.Instence.GetPassWord("admin");
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+          
             base.OnNavigatedTo(e);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainPage.Instance.JumpTo("UserMainPage");
+            string UserName = UserNameInput.Text;
+            string PassWord = PassWordInput.Text;
+            
+            if (Debug==1)
+            {
+                App.Instance.JumpTo("AdminMainPage", SenderType: typeof(LoginPage));
+                return;
+            }
+            else if(Debug==2)
+            {
+                App.Instance.JumpTo("UserMainPage", SenderType: typeof(LoginPage));
+
+                return;
+            }
+            if(PassWord==DataBase.Instence.GetPassWord(UserName))
+            {
+                if (DataBase.Instence.IsAdmin(UserName))
+                {
+                    await new ContentDialog
+                    {
+                        Title = "登录成功",
+                        Content = $"欢迎管理员{UserName}",
+                        CloseButtonText = "好的"
+                    }.ShowAsync();
+                    App.Instance.JumpTo("AdminMainPage", SenderType: typeof(LoginPage));
+                    
+                }
+                else
+                {
+                    await new ContentDialog
+                    {
+                        Title = "登录成功",
+                        Content = $"欢迎用户{UserName}",
+                        CloseButtonText = "好的"
+                    }.ShowAsync();
+                    App.Instance.JumpTo("UserMainPage", SenderType: typeof(LoginPage));
+                }
+            }
+            else
+            {
+                await new ContentDialog
+                {
+                    Title = "登录失败",
+                    Content = $"密码或用户名输入错误,请重新登陆",
+                    CloseButtonText = "好的"
+                }.ShowAsync();
+            }
+            
         }
     }
 }

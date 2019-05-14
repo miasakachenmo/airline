@@ -82,7 +82,7 @@ namespace PlaneUWP
  
 
 
-        //用户买票
+        //用户买票，正常买票status为0
         public bool AddTicket(string UserId,string AirlineId,string Date)
         {
             
@@ -98,12 +98,7 @@ namespace PlaneUWP
                 mySqlDataReader.Close();
                 string tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
                 ExecuteNoQuery(tempo_1);
-                AirLine.Status status = new AirLine.Status();
-                status = GetStatus(AirlineId, Date);
-                string final_status="";
-                if (status.islate)
-                    final_status = "late";
-                string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",\"{final_status}\")";
+                string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",'0')";
                 ExecuteNoQuery(tempo_2);
                 return true;
             }
@@ -168,7 +163,7 @@ namespace PlaneUWP
             }
         }
 
-        //用户类型,是否是管理员,是的话返回true
+        //用户类型,type为1是管理员,返回true，其他返回false
         public bool IsAdmin(string Userid)
         {
             string str = $"select usertype from user where userid=\"{Userid}\"";

@@ -168,7 +168,7 @@ namespace PlaneUWP
             }
         }
 
-        //用户类型,是否是管理员,是的话返回true
+        //用户类型,是否是管理员,是的话返回true (数据库中 管理员表示为0)
         public bool IsAdmin(string Userid)
         {
             string str = $"select usertype from user where userid=\"{Userid}\"";
@@ -177,7 +177,7 @@ namespace PlaneUWP
             {
                 string type = mySqlDataReader.GetString("usertype");
                 mySqlDataReader.Close();
-                if (type == "1")
+                if (type == "0")
                     return true;
                 else
                     return false;
@@ -232,8 +232,7 @@ namespace PlaneUWP
 
         public  DataBase()
         {
-
-            sqlConnection = new MySqlConnection(ConnectString);
+            sqlConnection = new MySqlConnection(ConnectStringLocal);
             sqlConnection.Open();
             
         }

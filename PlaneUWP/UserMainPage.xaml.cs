@@ -36,10 +36,6 @@ namespace PlaneUWP
             this.InitializeComponent();
         }
 
-        private void UserMainPage_BackRequested(object sender, Windows.UI.Core.BackRequestedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

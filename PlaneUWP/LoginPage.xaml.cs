@@ -54,6 +54,8 @@ namespace PlaneUWP
             {
                 if (DataBase.Instence.IsAdmin(UserName))
                 {
+                    App.Instance.UserName = UserName;
+                    App.Instance.UserType = "admin";
                     await new ContentDialog
                     {
                         Title = "登录成功",
@@ -65,6 +67,8 @@ namespace PlaneUWP
                 }
                 else
                 {
+                    App.Instance.UserName = UserName;
+                    App.Instance.UserType = "user";
                     await new ContentDialog
                     {
                         Title = "登录成功",

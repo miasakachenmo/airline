@@ -30,13 +30,33 @@ namespace PlaneUWP
         ///
         public static App Instance;
         public Frame rootFrame;
-        public void JumpTo(String PageName)
+        public void JumpTo(String PageName,Type SenderType=null)
         {
             rootFrame.Navigate(Type.GetType("PlaneUWP." + PageName));
+            if (SenderType==typeof(LoginPage))
+            {
+                var a = App.Instance.rootFrame.BackStackDepth;
+                App.Instance.rootFrame.BackStack.RemoveAt(App.Instance.rootFrame.BackStackDepth - 1);
+                var b = App.Instance.rootFrame.BackStackDepth;
+            }
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+            (Window.Current.Content as Frame).CanGoBack ?
+            AppViewBackButtonVisibility.Visible :
+            AppViewBackButtonVisibility.Collapsed;
         }
-        public void JumpTo(String PageName, Object Pra)
+        public void JumpTo(String PageName, Object Pra, Type SenderType=null)
         {
             rootFrame.Navigate(Type.GetType("PlaneUWP." + PageName), Pra);
+            if (SenderType == typeof(LoginPage))
+            {
+                var a = App.Instance.rootFrame.BackStackDepth;
+                App.Instance.rootFrame.BackStack.RemoveAt(App.Instance.rootFrame.BackStackDepth - 1);
+                var b = App.Instance.rootFrame.BackStackDepth;
+            }
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+            (Window.Current.Content as Frame).CanGoBack ?
+            AppViewBackButtonVisibility.Visible :
+            AppViewBackButtonVisibility.Collapsed;
         }
         public App()
         {
@@ -80,6 +100,7 @@ namespace PlaneUWP
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
+                    
                     rootFrame.Navigate(typeof(LoginPage), e.Arguments);
                 }
                 // 确保当前窗口处于活动状态
@@ -92,8 +113,13 @@ namespace PlaneUWP
             Frame rootFrame = Window.Current.Content as Frame;
             if (rootFrame.CanGoBack)
             {
+                
                 rootFrame.GoBack();
                 e.Handled = true;
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                (Window.Current.Content as Frame).CanGoBack ?
+                AppViewBackButtonVisibility.Visible :
+                AppViewBackButtonVisibility.Collapsed;
             }
         }
 

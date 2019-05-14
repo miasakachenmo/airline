@@ -206,7 +206,7 @@ namespace PlaneUWP
             if (!reader.Read())
             {
                 reader.Close();
-                return "";
+                return null;
             }
             string password = reader.GetString("password");
             reader.Close();

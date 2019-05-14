@@ -30,8 +30,8 @@
                     <TextBlock Grid.Column="4" Text="{x:Bind begintime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="5" Text="{x:Bind arrivetime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="6" Text="否" FontSize="15" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="7" Text="{x:Bind islatestr}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="8" Text="{x:Bind remainticket}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="7" Text="{Binding islatestr}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="8" Visibility="{x:Bind Seeable, Mode=OneWay}" Text="{x:Bind remainticket, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </DataTemplate>
             
@@ -83,7 +83,7 @@
                 <TextBlock FontSize="20" Text="余票" TextAlignment="Center"></TextBlock>
             </StackPanel>
         </Grid>
-        <ListView IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Grid.Row="1" Grid.ColumnSpan="8" Background="White" ItemsSource="{x:Bind airLines}" BorderBrush="{x:Null}" ItemTemplate="{StaticResource AirLineTemplate}">
+        <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Grid.Row="1" Grid.ColumnSpan="8" Background="White" ItemsSource="{x:Bind airLines}" BorderBrush="{x:Null}" ItemTemplate="{StaticResource AirLineTemplate}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

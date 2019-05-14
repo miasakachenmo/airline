@@ -34,13 +34,21 @@ namespace PlaneUWP
         {
             
             this.InitializeComponent();
+            ResultPage.ResultParam param = new ResultPage.ResultParam();
+            param.airLines = DataBase.Instence.GetBuyedTickets(App.Instance.UserName);
+            param.type = ResultPage.PageType.UserMessagePage;
+            MyTicket.Navigate(Type.GetType("PlaneUWP.ResultPage"), param);
+
         }
 
-        private void UserMainPage_BackRequested(object sender, Windows.UI.Core.BackRequestedEventArgs e)
+        private void Button_Click_Test(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
-        }
+            ResultPage.ResultParam param = new ResultPage.ResultParam();
+            param.airLines = new DataBase().QueryAirline("包头","北京","6.1");
+            param.type = ResultPage.PageType.UserSearchPage;
 
+            App.Instance.JumpTo("ResultPage", param);
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 

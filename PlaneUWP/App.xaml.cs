@@ -23,11 +23,14 @@ namespace PlaneUWP
     /// </summary>
     sealed partial class App : Application
     {
+
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
         /// 已执行，逻辑上等同于 main() 或 WinMain()。
         /// </summary>
         ///
+        public string UserName;
+        public string UserType;
         public static App Instance;
         public Frame rootFrame;
         public void JumpTo(String PageName,Type SenderType=null)

@@ -23,7 +23,6 @@ namespace PlaneUWP
     /// </summary>
     public sealed partial class LoginPage : Page
     {
-        public int Debug = 0;
         public LoginPage()
         {
             this.InitializeComponent();
@@ -34,26 +33,22 @@ namespace PlaneUWP
             base.OnNavigatedTo(e);
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private  void Button_Click_UserTest(object sender ,RoutedEventArgs e)
         {
-            string UserName = UserNameInput.Text;
-            string PassWord = PassWordInput.Text;
-            
-            if (Debug==1)
-            {
-                App.Instance.JumpTo("AdminMainPage", SenderType: typeof(LoginPage));
-                return;
-            }
-            else if(Debug==2)
-            {
-                App.Instance.JumpTo("UserMainPage", SenderType: typeof(LoginPage));
-
-                return;
-            }
-            if(PassWord==DataBase.Instence.GetPassWord(UserName))
+            Login("zhangyusong", "123");
+        }
+        private  void Button_Click_AdminTest(object sender, RoutedEventArgs e)
+        {
+            Login("admin", "123");
+        }
+        private async void Login(string UserName,string PassWord)
+        {
+            if (PassWord == DataBase.Instence.GetPassWord(UserName))
             {
                 if (DataBase.Instence.IsAdmin(UserName))
                 {
+                    App.Instance.UserName = UserName;
+                    App.Instance.UserType = "admin";
                     await new ContentDialog
                     {
                         Title = "登录成功",
@@ -61,10 +56,12 @@ namespace PlaneUWP
                         CloseButtonText = "好的"
                     }.ShowAsync();
                     App.Instance.JumpTo("AdminMainPage", SenderType: typeof(LoginPage));
-                    
+
                 }
                 else
                 {
+                    App.Instance.UserName = UserName;
+                    App.Instance.UserType = "user";
                     await new ContentDialog
                     {
                         Title = "登录成功",
@@ -83,6 +80,14 @@ namespace PlaneUWP
                     CloseButtonText = "好的"
                 }.ShowAsync();
             }
+
+        }
+        private  void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string UserName = UserNameInput.Text;
+            string PassWord = PassWordInput.Text;
+            Login(UserName, PassWord);
+            
             
         }
     }

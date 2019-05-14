@@ -37,12 +37,19 @@ namespace PlaneUWP
 
             base.OnNavigatedTo(e);
             type = ((ResultParam)e.Parameter).type;
+            switch(type)
+            {
+                case PageType.UserMessagePage:
+                    LastTicket.Visibility = Visibility.Collapsed;
+                    break;
+            }
             airLines= ((ResultParam)e.Parameter).airLines;
 
             foreach (AirLine airLine in airLines)
             {
                 airLine.itemType = type;
             }
+            
         }
 
         public enum PageType {UserMessagePage,UserSearchPage,AdminSearchPage};

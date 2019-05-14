@@ -29,6 +29,34 @@ namespace PlaneUWP
 
         string ConnectString = "server=119.23.219.88;port=3306;user=airline;password=123;database=airline;";
 
+
+        //已经买到的票
+        public List<AirLine> GetBuyedTickets(string UserName)
+        {
+            string Exe = $"select * from airline natural join buyticket where userid=\"{UserName}\"";
+            List<AirLine> airLines = new List<AirLine>();
+            MySqlDataReader mySqlDataReader = Execute(Exe);
+
+            while (mySqlDataReader.Read())
+            {
+                AirLine newAirLine = new AirLine();
+                newAirLine.arrivetime = mySqlDataReader.GetString("arrivetime");
+                newAirLine.date = mySqlDataReader.GetString("date");
+                newAirLine.comp = mySqlDataReader.GetString("comp");
+                newAirLine.airlinenum = mySqlDataReader.GetString("airlinenum");
+                newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");
+                newAirLine.begincity = mySqlDataReader.GetString("begincity");
+                newAirLine.begintime = mySqlDataReader.GetString("begintime");
+                newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
+                airLines.Add(newAirLine);
+            }
+            mySqlDataReader.Close();
+            foreach (AirLine newAirLine in airLines)
+            {
+                newAirLine.status = GetStatus(newAirLine.airlinenum, newAirLine.date);
+            }
+            return airLines;
+        }
         public AirLine.Status GetStatus(string AirLineNum,string Date)
         {
             string Exe = $"select * from airlinestatus where airlinenum=\"{AirLineNum}\" and date=\"{Date}\"";
@@ -68,7 +96,7 @@ namespace PlaneUWP
                 newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");
                 newAirLine.begincity = mySqlDataReader.GetString("begincity");
                 newAirLine.begintime = mySqlDataReader.GetString("begintime");
-                newAirLine.remainticket = mySqlDataReader.GetString("remainticket");
+                newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
                 airLines.Add(newAirLine);
             }
             mySqlDataReader.Close();
@@ -122,7 +150,21 @@ namespace PlaneUWP
         {   
             return null;
         }
+        //插入延误信息
+        public void AddMessage(string AirlineId,string Date,string status,string time=null)
+        {
 
+        }
+        //检查是否有相同航班(检测航班号应该就行)
+        public bool HasSameAirline(AirLine airline)
+        {
+            return false;
+        }
+        //插入航班(先引用一下上一个函数判断是否是重复航班)
+        public void AddAirline(AirLine airline)
+        {
+
+        }
         //航班取消
         public void AirlineCanael(string AirlineId,string Date)
         {
@@ -165,7 +207,7 @@ namespace PlaneUWP
             }
         }
 
-        //用户类型,type为1是管理员,返回true，其他返回false
+        //用户类型,是否是管理员,是的话返回true (数据库中 管理员表示为0)
         public bool IsAdmin(string Userid)
         {
             string str = $"select usertype from user where userid=\"{Userid}\"";
@@ -174,7 +216,7 @@ namespace PlaneUWP
             {
                 string type = mySqlDataReader.GetString("usertype");
                 mySqlDataReader.Close();
-                if (type == "1")
+                if (type == "0")
                     return true;
                 else
                     return false;
@@ -229,7 +271,6 @@ namespace PlaneUWP
 
         public  DataBase()
         {
-
             sqlConnection = new MySqlConnection(ConnectString);
             sqlConnection.Open();
             

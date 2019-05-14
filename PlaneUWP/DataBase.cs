@@ -47,7 +47,7 @@ namespace PlaneUWP
                 newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");
                 newAirLine.begincity = mySqlDataReader.GetString("begincity");
                 newAirLine.begintime = mySqlDataReader.GetString("begintime");
-                newAirLine.remainticket = mySqlDataReader.GetString("remainticket");
+                newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
                 airLines.Add(newAirLine);
             }
             mySqlDataReader.Close();
@@ -96,7 +96,7 @@ namespace PlaneUWP
                 newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");
                 newAirLine.begincity = mySqlDataReader.GetString("begincity");
                 newAirLine.begintime = mySqlDataReader.GetString("begintime");
-                newAirLine.remainticket = mySqlDataReader.GetString("remainticket");
+                newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
                 airLines.Add(newAirLine);
             }
             mySqlDataReader.Close();
@@ -255,7 +255,7 @@ namespace PlaneUWP
 
         public  DataBase()
         {
-            sqlConnection = new MySqlConnection(ConnectStringLocal);
+            sqlConnection = new MySqlConnection(ConnectString);
             sqlConnection.Open();
             
         }

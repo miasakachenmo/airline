@@ -61,11 +61,12 @@ namespace PlaneUWP
         }
         public void UserSearchPage()
         {
-            if (Int32.Parse( airLine.remainticket)!=0)
+            if ( airLine.remainticket!=0)
             {
                 AButton.Content = "买票";
                 AButton.Click += async (sender, e) => {
                     DataBase.Instence.AddTicket(App.Instance.UserName, airLine.airlinenum, airLine.date);
+                    airLine.remainticket -= 1;
                     father.Hide();
                     await new ContentDialog()
                     {

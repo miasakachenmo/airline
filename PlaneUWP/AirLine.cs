@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,14 +8,26 @@ using Windows.UI.Xaml;
 
 namespace PlaneUWP
 {
-    public class AirLine
+    public class AirLine:INotifyPropertyChanged
     {
         public string comp;
         public string airlinenum;
         public string begintime;
         public string arrivetime;
 
-        public string remainticket;
+        public int _remainticket;
+        public int remainticket
+        {
+            get
+            {
+                return _remainticket;
+            }
+
+            set
+            {
+                _remainticket = value;PropertyChanged(this, new PropertyChangedEventArgs("remainticket"));
+            }
+        }
         public string cross;
 
         public string begincity;
@@ -32,6 +45,8 @@ namespace PlaneUWP
         }
 
         public ResultPage.PageType itemType;
+
+        public event PropertyChangedEventHandler PropertyChanged=delegate { };
 
         public string islatestr
         {

@@ -1,0 +1,26 @@
+﻿<UserControl
+    x:Class="PlaneUWP.AddAirlineDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PlaneUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    <UserControl.Resources>
+        <local:AirLine x:Key="airline"></local:AirLine>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel DataContext="{StaticResource airline}">
+            <TextBox PlaceholderText="航班号" Text="{Binding Path=airlinenum}" ></TextBox>
+            <TextBox PlaceholderText="日期" Text="{Binding Path=date}" ></TextBox>
+            <TextBox PlaceholderText="航空公司" Text="{Binding Path=comp}" ></TextBox>
+            <TextBox PlaceholderText="起飞城市" Text="{Binding Path=begincity}" ></TextBox>
+            <TextBox PlaceholderText="到达城市" Text="{Binding Path=arrivecity}" ></TextBox>
+            <TextBox PlaceholderText="起飞时间" Text="{Binding Path=begintime}" ></TextBox>
+            <TextBox PlaceholderText="到达时间" Text="{Binding Path=arrivetime}" ></TextBox>
+            <TextBox PlaceholderText="余票" Text="{Binding Path=remainticket}" ></TextBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -148,7 +148,21 @@ namespace PlaneUWP
         {
             return null;
         }
+        //插入延误信息
+        public void AddMessage(string AirlineId,string Date,string status,string time=null)
+        {
 
+        }
+        //检查是否有相同航班(检测航班号应该就行)
+        public bool HasSameAirline(AirLine airline)
+        {
+            return false;
+        }
+        //插入航班(先引用一下上一个函数判断是否是重复航班)
+        public void AddAirline(AirLine airline)
+        {
+
+        }
         //航班取消
         public void AirlineCanael(string AirlineId,string Date)
         {

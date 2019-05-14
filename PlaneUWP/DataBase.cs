@@ -43,7 +43,7 @@ namespace PlaneUWP
                         status.newtime = mySqlDataReader.GetString("time");
                         break;
                     case "canceled":
-                        status.iscanceled = false;
+                        status.iscanceled = true;
                         break;
                 }
             }
@@ -83,15 +83,41 @@ namespace PlaneUWP
 
 
         //用户买票
-        public void AddTicket(string UserId,string AirlineId,string Date)
+        public bool AddTicket(string UserId,string AirlineId,string Date)
         {
+            
+            string tempo = $"select * from  buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{UserId}\"";
+            MySqlDataReader mySqlDataReader = Execute(tempo);
+            if (mySqlDataReader.Read())
+            {
+                mySqlDataReader.Close();
+                return false;
+            }
+            else
+            {
+                mySqlDataReader.Close();
+                string tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+                ExecuteNoQuery(tempo_1);
+                AirLine.Status status = new AirLine.Status();
+                status = GetStatus(AirlineId, Date);
+                string final_status="";
+                if (status.islate)
+                    final_status = "late";
+                string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",\"{final_status}\")";
+                ExecuteNoQuery(tempo_2);
+                return true;
+            }
+
         }
 
 
         //用户退票
         public void DelTicket(string Userid,string AirlineId, string Date)
         {
-
+            string tempo_1 = $"delete from buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{Userid}\"";
+            ExecuteNoQuery(tempo_1);
+            string tempo_2 = $"update airline set remainticket=remainticket+1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            ExecuteNoQuery(tempo_2);
         }
 
         //查询信息
@@ -103,13 +129,43 @@ namespace PlaneUWP
         //航班取消
         public void AirlineCanael(string AirlineId,string Date)
         {
-
+            string tempo = $"select * from airlinestatus where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            MySqlDataReader mySqlDataReader = Execute(tempo);
+            if (mySqlDataReader.Read())
+            {
+                string str = $"UPDATE airlinestatus SET status='canceled' where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+                mySqlDataReader.Close();
+                ExecuteNoQuery(str);
+                return;
+            }
+            else
+            {
+                mySqlDataReader.Close();
+                string str = $"INSERT INTO airlinestatus (airlinenum,date,status,time) VALUES (\"{AirlineId}\",\"{Date}\" ,'canceled','')";
+                ExecuteNoQuery(str);
+                return;
+            }
         }
 
         //航班延误
         public void AirlineLate(string AirlineId,string LateTime,string Date)
         {
-
+            string tempo = $"select * from airlinestatus where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            MySqlDataReader mySqlDataReader = Execute(tempo);
+            if(mySqlDataReader.Read())
+            {
+                string str = $"update airlinestatus set time=\"{LateTime}\"where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+                mySqlDataReader.Close();
+                ExecuteNoQuery(str);
+                return;
+            }
+            else
+            {
+                mySqlDataReader.Close();
+                string str = $"INSERT INTO airlinestatus (airlinenum,date,status,time) VALUES (\"{AirlineId}\",\"{Date}\" ,'late',\"{LateTime}\")";
+                ExecuteNoQuery(str);
+                return;
+            }
         }
 
         //用户类型,是否是管理员,是的话返回true
@@ -117,12 +173,17 @@ namespace PlaneUWP
         {
             string str = $"select usertype from user where userid=\"{Userid}\"";
             MySqlDataReader mySqlDataReader = Execute(str);
-            mySqlDataReader.Read();
-            string type=mySqlDataReader.GetString("usertype");
-            mySqlDataReader.Close();
-            if (type == "1")
-                return true;
-            return false;
+            if (mySqlDataReader.Read())
+            {
+                string type = mySqlDataReader.GetString("usertype");
+                mySqlDataReader.Close();
+                if (type == "1")
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
         }
         
         //判断密码
@@ -160,6 +221,11 @@ namespace PlaneUWP
         {
             return new MySqlCommand(Command, sqlConnection).ExecuteReader();
         }
+        public void ExecuteNoQuery(string Command)
+        {
+            new MySqlCommand(Command, sqlConnection).ExecuteNonQuery();
+
+        }
 
         MySqlConnection sqlConnection;
 
@@ -167,7 +233,7 @@ namespace PlaneUWP
         public  DataBase()
         {
 
-            sqlConnection = new MySqlConnection(ConnectStringLocal);
+            sqlConnection = new MySqlConnection(ConnectString);
             sqlConnection.Open();
             
         }

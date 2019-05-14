@@ -34,6 +34,11 @@ namespace PlaneUWP
         {
             
             this.InitializeComponent();
+            ResultPage.ResultParam param = new ResultPage.ResultParam();
+            param.airLines = DataBase.Instence.GetBuyedTickets(App.Instance.UserName);
+            param.type = ResultPage.PageType.UserMessagePage;
+            MyTicket.Navigate(Type.GetType("PlaneUWP.ResultPage"), param);
+
         }
 
 

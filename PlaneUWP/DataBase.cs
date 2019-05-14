@@ -29,6 +29,34 @@ namespace PlaneUWP
 
         string ConnectString = "server=119.23.219.88;port=3306;user=airline;password=123;database=airline;";
 
+
+        //已经买到的票
+        public List<AirLine> GetBuyedTickets(string UserName)
+        {
+            string Exe = $"select * from airline natural join buyticket where userid=\"{UserName}\"";
+            List<AirLine> airLines = new List<AirLine>();
+            MySqlDataReader mySqlDataReader = Execute(Exe);
+
+            while (mySqlDataReader.Read())
+            {
+                AirLine newAirLine = new AirLine();
+                newAirLine.arrivetime = mySqlDataReader.GetString("arrivetime");
+                newAirLine.date = mySqlDataReader.GetString("date");
+                newAirLine.comp = mySqlDataReader.GetString("comp");
+                newAirLine.airlinenum = mySqlDataReader.GetString("airlinenum");
+                newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");
+                newAirLine.begincity = mySqlDataReader.GetString("begincity");
+                newAirLine.begintime = mySqlDataReader.GetString("begintime");
+                newAirLine.remainticket = mySqlDataReader.GetString("remainticket");
+                airLines.Add(newAirLine);
+            }
+            mySqlDataReader.Close();
+            foreach (AirLine newAirLine in airLines)
+            {
+                newAirLine.status = GetStatus(newAirLine.airlinenum, newAirLine.date);
+            }
+            return airLines;
+        }
         public AirLine.Status GetStatus(string AirLineNum,string Date)
         {
             string Exe = $"select * from airlinestatus where airlinenum=\"{AirLineNum}\" and date=\"{Date}\"";

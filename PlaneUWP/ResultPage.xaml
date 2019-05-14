@@ -31,7 +31,7 @@
                     <TextBlock Grid.Column="5" Text="{x:Bind arrivetime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="6" Text="否" FontSize="15" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="7" Text="{x:Bind islatestr}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="8" Text="{x:Bind remainticket}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="8" Visibility="{x:Bind Seeable}" Text="{x:Bind remainticket}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </DataTemplate>
             

@@ -73,7 +73,6 @@ namespace PlaneUWP
                         Title = $"买票成功!",
                         FullSizeDesired = false
                     }.ShowAsync();
-                    
                 };
             }
             else

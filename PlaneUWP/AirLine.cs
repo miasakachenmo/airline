@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace PlaneUWP
 {
@@ -22,7 +23,13 @@ namespace PlaneUWP
         public string date;
         public Status status;
 
-
+        public Visibility Seeable
+        {
+            get
+            {
+                return itemType == ResultPage.PageType.UserMessagePage ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
 
         public ResultPage.PageType itemType;
 

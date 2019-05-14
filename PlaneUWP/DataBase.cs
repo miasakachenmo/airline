@@ -85,6 +85,7 @@ namespace PlaneUWP
         //用户买票
         public bool AddTicket(string UserId,string AirlineId,string Date)
         {
+            
             string tempo = $"select * from  buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{UserId}\"";
             MySqlDataReader mySqlDataReader = Execute(tempo);
             if (mySqlDataReader.Read())
@@ -95,7 +96,7 @@ namespace PlaneUWP
             else
             {
                 mySqlDataReader.Close();
-                string tempo_1= $"UPDATE airline SET remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+                string tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
                 ExecuteNoQuery(tempo_1);
                 AirLine.Status status = new AirLine.Status();
                 status = GetStatus(AirlineId, Date);
@@ -113,7 +114,10 @@ namespace PlaneUWP
         //用户退票
         public void DelTicket(string Userid,string AirlineId, string Date)
         {
-
+            string tempo_1 = $"delete from buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{Userid}\"";
+            ExecuteNoQuery(tempo_1);
+            string tempo_2 = $"update airline set remainticket=remainticket+1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            ExecuteNoQuery(tempo_2);
         }
 
         //查询信息
@@ -169,12 +173,17 @@ namespace PlaneUWP
         {
             string str = $"select usertype from user where userid=\"{Userid}\"";
             MySqlDataReader mySqlDataReader = Execute(str);
-            mySqlDataReader.Read();
-            string type=mySqlDataReader.GetString("usertype");
-            mySqlDataReader.Close();
-            if (type == "1")
-                return true;
-            return false;
+            if (mySqlDataReader.Read())
+            {
+                string type = mySqlDataReader.GetString("usertype");
+                mySqlDataReader.Close();
+                if (type == "1")
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
         }
         
         //判断密码
@@ -224,7 +233,7 @@ namespace PlaneUWP
         public  DataBase()
         {
 
-            sqlConnection = new MySqlConnection(ConnectStringLocal);
+            sqlConnection = new MySqlConnection(ConnectString);
             sqlConnection.Open();
             
         }

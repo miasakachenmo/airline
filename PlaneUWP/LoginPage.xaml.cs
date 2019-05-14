@@ -25,7 +25,7 @@ namespace PlaneUWP
         public LoginPage()
         {
             this.InitializeComponent();
-            Pass.Text = DataBase.Instence.GetPassWord("admin");
+            DataBase.Instence.AddTicket("199", "FM2910", "6.1");
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

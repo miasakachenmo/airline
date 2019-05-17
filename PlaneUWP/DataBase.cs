@@ -107,31 +107,33 @@ namespace PlaneUWP
             }
             return airLines;
         }
-
- 
-
-
-        //用户买票，正常买票status为0
-        public bool AddTicket(string UserId,string AirlineId,string Date)
+        
+        //是否买过票,买过为true，没买过为false
+        public bool isbuy(string UserId, string AirlineId, string Date)
         {
-            
             string tempo = $"select * from  buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{UserId}\"";
             MySqlDataReader mySqlDataReader = Execute(tempo);
             if (mySqlDataReader.Read())
             {
                 mySqlDataReader.Close();
-                return false;
+                return true;
             }
             else
             {
                 mySqlDataReader.Close();
-                string tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
-                ExecuteNoQuery(tempo_1);
-                string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",'0')";
-                ExecuteNoQuery(tempo_2);
-                return true;
+                return false;
             }
+        }
+        
 
+
+        //用户买票，正常买票status为0
+        public void AddTicket(string UserId,string AirlineId,string Date)
+        {
+            string tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            ExecuteNoQuery(tempo_1);
+            string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",'0')";
+            ExecuteNoQuery(tempo_2);
         }
 
 
@@ -146,7 +148,7 @@ namespace PlaneUWP
 
         //查询信息
         public string[] GetMessage(string Userid)
-        {
+        {   
             return null;
         }
         //插入延误信息

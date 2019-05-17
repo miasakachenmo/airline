@@ -57,6 +57,7 @@ namespace PlaneUWP
             }
             return airLines;
         }
+        //Status:late为晚点 canceled为取消
         public AirLine.Status GetStatus(string AirLineNum,string Date)
         {
             string Exe = $"select * from airlinestatus where airlinenum=\"{AirLineNum}\" and date=\"{Date}\"";
@@ -149,9 +150,10 @@ namespace PlaneUWP
             return null;
         }
         //插入延误信息
-        public void AddMessage(string AirlineId,string Date,string status,string time=null)
+        public void AddMessage(List<string> userids,string message)
         {
 
+            
         }
         //检查是否有相同航班(检测航班号应该就行)
         public bool HasSameAirline(AirLine airline)
@@ -185,11 +187,15 @@ namespace PlaneUWP
         }
 
         //航班延误
-        public void AirlineLate(string AirlineId,string LateTime,string Date)
+        public void AirlineLate(AirLine airLine,TimeSpan LateTime)
         {
-            string tempo = $"select * from airlinestatus where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
-            MySqlDataReader mySqlDataReader = Execute(tempo);
-            if(mySqlDataReader.Read())
+            string AirlineId = airLine.airlinenum;
+            string Date = airLine.date;
+            
+            /*
+            //string tempo = $"select * from airlinestatus where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            //MySqlDataReader mySqlDataReader = Execute(tempo);
+            if (mySqlDataReader.Read())
             {
                 string str = $"update airlinestatus set time=\"{LateTime}\"where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
                 mySqlDataReader.Close();
@@ -203,8 +209,50 @@ namespace PlaneUWP
                 ExecuteNoQuery(str);
                 return;
             }
-        }
+            */
 
+            string LateStr = $"INSERT INTO airlinestatus (airlinenum,date,status,time) VALUES (\"{AirlineId}\",\"{Date}\" ,'late',\"{LateTime.Hours}:{LateTime.Minutes}\")";
+            ExecuteNoQuery(LateStr);
+            //插入延误
+            //给用户延误信息
+
+            //先取得受影响的用户ID
+            var UseridList = GetUsersBuyedThisTicket(AirlineId, Date);
+            string SubAirLine = GetNearAirLine(airLine);
+            if(SubAirLine!=null)
+            {
+                string Message = $"您好,您在{Date}的航班{AirlineId}已经延误,您";
+
+            }
+
+
+
+        }
+        public string GetNearAirLine(AirLine airLine)
+        {
+            //List<string> temp=new List<string>();
+            string Search = $"SELECT * FROM airline Left join airlinestatus on(airline.airlinenum=airlinestatus.airlinenum and airline.date=airlinestatus.date) where airline.begincity =\"{airLine.begincity}\" and airline.arrivecity=\"{airLine.arrivecity}\" and airline.airlinenum!=\"{airLine.airlinenum}\" and airlinestatus.status!=null";
+            MySqlDataReader mySqlDataReader = Execute(Search);
+            string Temp=null;
+            if(mySqlDataReader.Read())
+            {
+                Temp=(mySqlDataReader.GetString("airlinenum"));
+            }
+            return Temp;
+        }
+        //查到买了这张票的所有用户
+        public List<string> GetUsersBuyedThisTicket(string AirlineNum,string Date)
+        {
+            List<string> temp = new List<string>();
+            string SearchStr = $"select userid from buyticket where airlinenum={AirlineNum} and date={Date}";
+            MySqlDataReader mySqlDataReader = Execute(SearchStr);
+            while(mySqlDataReader.Read())
+            {
+                temp.Add(mySqlDataReader.GetString("userid"));
+            }
+            mySqlDataReader.Close();
+            return temp;
+        }
         //用户类型,是否是管理员,是的话返回true (数据库中 管理员表示为0)
         public bool IsAdmin(string Userid)
         {

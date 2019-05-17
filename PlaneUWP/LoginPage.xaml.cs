@@ -26,6 +26,7 @@ namespace PlaneUWP
         public LoginPage()
         {
             this.InitializeComponent();
+            TestBox.Text = (DateTime.Parse("11:25")+new TimeSpan(10,10,0,0)).ToString();
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

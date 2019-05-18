@@ -1,10 +1,6 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
-using MySql.Data.MySqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
 
 namespace PlaneUWP
 {
@@ -145,66 +141,55 @@ namespace PlaneUWP
             ExecuteNoQuery(tempo_2);
         }
 
-        //查询信息
+        //查询信息乘客所购买航班的延误情况
         public string[] GetMessage(string Userid)
         {   
             return null;
         }
-        //插入延误信息
-        public void AddMessage(string AirlineId,string Date,string status,string time=null)
-        {
-
-        }
         //检查是否有相同航班(检测航班号应该就行)
         public bool HasSameAirline(AirLine airline)
         {
-            return false;
-        }
-        //插入航班(先引用一下上一个函数判断是否是重复航班)
-        public void AddAirline(AirLine airline)
-        {
-
-        }
-        //航班取消
-        public void AirlineCanael(string AirlineId,string Date)
-        {
-            string tempo = $"select * from airlinestatus where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
-            MySqlDataReader mySqlDataReader = Execute(tempo);
+            string str = $"select * from airline where airlinenum=\"{airline.airlinenum}\"";
+            MySqlDataReader mySqlDataReader = Execute(str);
             if (mySqlDataReader.Read())
             {
-                string str = $"UPDATE airlinestatus SET status='canceled' where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
                 mySqlDataReader.Close();
-                ExecuteNoQuery(str);
-                return;
+                return true;
             }
             else
             {
                 mySqlDataReader.Close();
-                string str = $"INSERT INTO airlinestatus (airlinenum,date,status,time) VALUES (\"{AirlineId}\",\"{Date}\" ,'canceled','')";
-                ExecuteNoQuery(str);
-                return;
+                return false;
             }
+               
+        }
+        //插入航班(先引用一下上一个函数判断是否是重复航班)
+        public void AddAirline(AirLine airline)
+        {
+            if (HasSameAirline(airline))
+                return;
+            else
+            {
+
+                string str = $"insert into airlinebackup.airline values (\"{airline.comp}\",\"{airline.airlinenum}\",\"{airline.begintime}\",\"{airline.arrivetime}\",\"{airline.remainticket}\",\"{airline.cross}\",\"{airline.begincity}\",\"{airline.arrivecity}\")";
+                ExecuteNoQuery(str);
+                string str_1 = $"insert into airline.airline select* from airlinebackup.airline inner join airline.date where airlinebackup.airline.airlinenum=\"{airline.airlinenum}\"";
+                ExecuteNoQuery(str_1);
+
+            }
+        }
+        //航班取消
+        public void AirlineCanael(string AirlineId,string Date)
+        {
+            string str = $"replace into airlinestatus values (\"{AirlineId}\",\"{Date}\",'canceled','0')";
+            ExecuteNoQuery(str);
         }
 
         //航班延误
         public void AirlineLate(string AirlineId,string LateTime,string Date)
         {
-            string tempo = $"select * from airlinestatus where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
-            MySqlDataReader mySqlDataReader = Execute(tempo);
-            if(mySqlDataReader.Read())
-            {
-                string str = $"update airlinestatus set time=\"{LateTime}\"where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
-                mySqlDataReader.Close();
-                ExecuteNoQuery(str);
-                return;
-            }
-            else
-            {
-                mySqlDataReader.Close();
-                string str = $"INSERT INTO airlinestatus (airlinenum,date,status,time) VALUES (\"{AirlineId}\",\"{Date}\" ,'late',\"{LateTime}\")";
-                ExecuteNoQuery(str);
-                return;
-            }
+            string str = $"replace INTO airlinestatus VALUES (\"{AirlineId}\",\"{Date}\" ,'late',\"{LateTime}\")";
+            ExecuteNoQuery(str);
         }
 
         //用户类型,是否是管理员,是的话返回true (数据库中 管理员表示为0)

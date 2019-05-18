@@ -26,6 +26,7 @@ namespace PlaneUWP
         public LoginPage()
         {
             this.InitializeComponent();
+            DataBase.Instence.AirlineCanael("FM2910", "6.1");
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

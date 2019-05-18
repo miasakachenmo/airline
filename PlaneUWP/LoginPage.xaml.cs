@@ -26,7 +26,7 @@ namespace PlaneUWP
         public LoginPage()
         {
             this.InitializeComponent();
-            DataBase.Instence.AirlineCanael("FM2910", "6.1");
+            TestBox.Text = (DateTime.Parse("11:25")+new TimeSpan(10,10,0,0)).ToString();
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

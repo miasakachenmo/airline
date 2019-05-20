@@ -184,11 +184,16 @@ namespace PlaneUWP
             string str = $"replace into airlinestatus values (\"{AirlineId}\",\"{Date}\",'canceled','0')";
             ExecuteNoQuery(str);
         }
-        public void AirlineLate(AirLine airLine, TimeSpan LateTime)
+
+        //修改内存里的航班->修改数据库里的航班状态->插入消息
+        public void AirlineLate(AirLine airLine, string LatetimeMin)
         {
+            airLine.status.islate = true;
+            airLine.status.newtime = LatetimeMin;
+
             string AirlineId = airLine.airlinenum;
             string Date = airLine.date;
-            string str = $"replace INTO airlinestatus VALUES (\"{AirlineId}\",\"{Date}\" ,'late',\"{LateTime}\")";
+            string str = $"replace INTO airlinestatus VALUES (\"{AirlineId}\",\"{Date}\" ,'late',\"{LatetimeMin}\")";
             ExecuteNoQuery(str);
             //插入延误
             //给用户延误信息
@@ -196,38 +201,47 @@ namespace PlaneUWP
             //先取得受影响的用户ID
             var UseridList = GetUsersBuyedThisTicket(AirlineId, Date);
             string SubAirLine = GetNearAirLine(airLine);
+            string Message;
             if (SubAirLine != null)
             {
-                string Message = $"您好,您在{Date}的航班{AirlineId}已经延误,您";
-
+                Message = $"您好,您在{Date}的航班{AirlineId}已经延误{LatetimeMin}分钟,您可以选择搭乘最近的航班{SubAirLine}";
             }
-
+            else
+            {
+                Message = $"您好,您在{Date}的航班{AirlineId}已经延误{LatetimeMin}分钟,请谅解";
+            }
+            AddMessage(UseridList, Message);
 
 
         }
         public string GetNearAirLine(AirLine airLine)
         {
             //List<string> temp=new List<string>();
-            string Search = $"SELECT * FROM airline Left join airlinestatus on(airline.airlinenum=airlinestatus.airlinenum and airline.date=airlinestatus.date) where airline.begincity =\"{airLine.begincity}\" and airline.arrivecity=\"{airLine.arrivecity}\" and airline.airlinenum!=\"{airLine.airlinenum}\" and airlinestatus.status!=null";
+            string Search = $"SELECT * FROM airline Left join airlinestatus on(airline.airlinenum=airlinestatus.airlinenum and airline.date=airlinestatus.date) where airline.begincity =\"{airLine.begincity}\" and airline.arrivecity=\"{airLine.arrivecity}\" and airline.airlinenum!=\"{airLine.airlinenum}\" and airlinestatus.status is NULL ";
             MySqlDataReader mySqlDataReader = Execute(Search);
             string Temp = null;
             if (mySqlDataReader.Read())
             {
                 Temp = (mySqlDataReader.GetString("airlinenum"));
             }
+            mySqlDataReader.Close();
             return Temp;
         }
         //插入延误信息
         public void AddMessage(List<string> userids, string message)
         {
-            
-
+            string sqlstr = "";
+            foreach (string userid in userids)
+            {
+                sqlstr += $"insert into message value(\"{userid}\",\"{message}\");";
+            }
+            ExecuteNoQuery(sqlstr);
         }
         //查到买了这张票的所有用户
         public List<string> GetUsersBuyedThisTicket(string AirlineNum, string Date)
         {
             List<string> temp = new List<string>();
-            string SearchStr = $"select userid from buyticket where airlinenum={AirlineNum} and date={Date}";
+            string SearchStr = $"select userid from buyticket where airlinenum=\"{AirlineNum}\" and date=\"{Date}\"";
             MySqlDataReader mySqlDataReader = Execute(SearchStr);
             while (mySqlDataReader.Read())
             {

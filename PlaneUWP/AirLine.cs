@@ -37,7 +37,8 @@ namespace PlaneUWP
 
             set
             {
-                _remainticket = value;PropertyChanged(this, new PropertyChangedEventArgs("remainticket"));
+                _remainticket = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("remainticket"));
             }
         }
         public string cross;

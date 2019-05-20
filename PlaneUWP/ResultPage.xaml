@@ -29,7 +29,7 @@
                     <TextBlock Grid.Column="4" Text="{x:Bind begintime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="5" Text="{x:Bind arrivetime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="6" Text="否" FontSize="15" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="7" Text="{x:Bind islatestr , UpdateSourceTrigger=PropertyChanged}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="7" Text="{x:Bind islatestr , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="8" Visibility="{x:Bind Seeable, Mode=OneWay}" Text="{x:Bind remainticket, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </DataTemplate>
@@ -76,7 +76,7 @@
                 <TextBlock FontSize="20" Text="途经" TextAlignment="Center"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="7" Name="IsLate">
-                <TextBlock FontSize="20" Text="是否晚点" TextAlignment="Center"></TextBlock>
+                <TextBlock FontSize="20" Text="晚点状态" TextAlignment="Center"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="8" Name="LastTicket">
                 <TextBlock FontSize="20" Text="余票" TextAlignment="Center"></TextBlock>

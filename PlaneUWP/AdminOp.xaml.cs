@@ -43,14 +43,25 @@ namespace PlaneUWP
         }
         public void AdminSearchPage()
         {
-            AButton.Content = "取消";
-            AButton.Click += (sender, e) => { father.Hide(); };
-            BButton.Content = "延误";
-            BButton.Click += async (sender, e) => { DataBase.Instence.AirlineLate(airLine,Input.Text); father.Hide();
+            AButton.Content = "取消航班";
+            AButton.Click += async (sender, e) => {
+                DataBase.Instence.AirlineCanael(airLine.airlinenum, airLine.date);
                 await new ContentDialog()
                 {
                     CloseButtonText = "关闭",
-                    Title = $"买票成功!",
+                    Title = $"取消成功!",
+                    FullSizeDesired = false
+                }.ShowAsync();
+                father.Hide(); };
+            BButton.Content = "延误";
+            BButton.Click += async (sender, e) => {
+                if (Input.Text == "")
+                    return;
+                DataBase.Instence.AirlineLate(airLine,Input.Text); father.Hide();
+                await new ContentDialog()
+                {
+                    CloseButtonText = "关闭",
+                    Title = $"延误成功!",
                     FullSizeDesired = false
                 }.ShowAsync();
             };

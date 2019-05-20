@@ -142,9 +142,17 @@ namespace PlaneUWP
         }
 
         //查询信息乘客所购买航班的延误情况
-        public string[] GetMessage(string Userid)
-        {   
-            return null;
+        public List<string> GetMessage(string Userid)
+        {
+            List<string> Temp = new List<string>();
+            string sqlstr = $"select message from message where userid=\"{Userid}\"";
+            MySqlDataReader mySqlDataReader = Execute(sqlstr);
+
+            while(mySqlDataReader.Read())
+            {
+                Temp.Add(mySqlDataReader.GetString("message"));
+            }
+            return Temp;
         }
         //检查是否有相同航班(检测航班号应该就行)
         public bool HasSameAirline(AirLine airline)
@@ -188,8 +196,8 @@ namespace PlaneUWP
         //修改内存里的航班->修改数据库里的航班状态->插入消息
         public void AirlineLate(AirLine airLine, string LatetimeMin)
         {
-            airLine.status.islate = true;
             airLine.status.newtime = LatetimeMin;
+            airLine.status.islate = true;
 
             string AirlineId = airLine.airlinenum;
             string Date = airLine.date;
@@ -217,7 +225,7 @@ namespace PlaneUWP
         public string GetNearAirLine(AirLine airLine)
         {
             //List<string> temp=new List<string>();
-            string Search = $"SELECT * FROM airline Left join airlinestatus on(airline.airlinenum=airlinestatus.airlinenum and airline.date=airlinestatus.date) where airline.begincity =\"{airLine.begincity}\" and airline.arrivecity=\"{airLine.arrivecity}\" and airline.airlinenum!=\"{airLine.airlinenum}\" and airlinestatus.status is NULL ";
+            string Search = $"SELECT * FROM airline Left join airlinestatus on(airline.airlinenum=airlinestatus.airlinenum and airline.date=airlinestatus.date) where airline.begincity =\"{airLine.begincity}\" and airline.arrivecity=\"{airLine.arrivecity}\" and airline.date=\"{airLine.date}\" and airline.airlinenum!=\"{airLine.airlinenum}\" and airlinestatus.status is NULL ";
             MySqlDataReader mySqlDataReader = Execute(Search);
             string Temp = null;
             if (mySqlDataReader.Read())
@@ -231,11 +239,13 @@ namespace PlaneUWP
         public void AddMessage(List<string> userids, string message)
         {
             string sqlstr = "";
+            
             foreach (string userid in userids)
             {
                 sqlstr += $"insert into message value(\"{userid}\",\"{message}\");";
             }
-            ExecuteNoQuery(sqlstr);
+            if(sqlstr!="")
+                ExecuteNoQuery(sqlstr);
         }
         //查到买了这张票的所有用户
         public List<string> GetUsersBuyedThisTicket(string AirlineNum, string Date)

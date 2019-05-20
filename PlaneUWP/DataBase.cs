@@ -184,14 +184,52 @@ namespace PlaneUWP
             string str = $"replace into airlinestatus values (\"{AirlineId}\",\"{Date}\",'canceled','0')";
             ExecuteNoQuery(str);
         }
-
-        //航班延误
-        public void AirlineLate(string AirlineId,string LateTime,string Date)
+        public void AirlineLate(AirLine airLine, TimeSpan LateTime)
         {
+            string AirlineId = airLine.airlinenum;
+            string Date = airLine.date;
             string str = $"replace INTO airlinestatus VALUES (\"{AirlineId}\",\"{Date}\" ,'late',\"{LateTime}\")";
             ExecuteNoQuery(str);
-        }
+            //插入延误
+            //给用户延误信息
 
+            //先取得受影响的用户ID
+            var UseridList = GetUsersBuyedThisTicket(AirlineId, Date);
+            string SubAirLine = GetNearAirLine(airLine);
+            if (SubAirLine != null)
+            {
+                string Message = $"您好,您在{Date}的航班{AirlineId}已经延误,您";
+
+            }
+
+
+
+        }
+        public string GetNearAirLine(AirLine airLine)
+        {
+            //List<string> temp=new List<string>();
+            string Search = $"SELECT * FROM airline Left join airlinestatus on(airline.airlinenum=airlinestatus.airlinenum and airline.date=airlinestatus.date) where airline.begincity =\"{airLine.begincity}\" and airline.arrivecity=\"{airLine.arrivecity}\" and airline.airlinenum!=\"{airLine.airlinenum}\" and airlinestatus.status!=null";
+            MySqlDataReader mySqlDataReader = Execute(Search);
+            string Temp = null;
+            if (mySqlDataReader.Read())
+            {
+                Temp = (mySqlDataReader.GetString("airlinenum"));
+            }
+            return Temp;
+        }
+        //查到买了这张票的所有用户
+        public List<string> GetUsersBuyedThisTicket(string AirlineNum, string Date)
+        {
+            List<string> temp = new List<string>();
+            string SearchStr = $"select userid from buyticket where airlinenum={AirlineNum} and date={Date}";
+            MySqlDataReader mySqlDataReader = Execute(SearchStr);
+            while (mySqlDataReader.Read())
+            {
+                temp.Add(mySqlDataReader.GetString("userid"));
+            }
+            mySqlDataReader.Close();
+            return temp;
+        }
         //用户类型,是否是管理员,是的话返回true (数据库中 管理员表示为0)
         public bool IsAdmin(string Userid)
         {

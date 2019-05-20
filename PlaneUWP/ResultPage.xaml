@@ -9,7 +9,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <ResourceDictionary>
-            
             <DataTemplate x:Key="AirLineTemplate" x:DataType="local:AirLine">
                 <Grid>
                     <Grid.ColumnDefinitions>

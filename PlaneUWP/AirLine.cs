@@ -13,8 +13,20 @@ namespace PlaneUWP
         public string comp;
         public string airlinenum;
         public string begintime;
-        public string arrivetime;
+        public string _arrivetime;
 
+        public string arrivetime {
+            get
+            {
+                if(status.islate)
+                    return (DateTime.Parse(_arrivetime.Replace(".", ":")) + new TimeSpan(0, 0, Int32.Parse(status.newtime), 0, 0)).ToString("hh:mm");
+                return _arrivetime;
+            }
+            set
+            {
+                _arrivetime = value;
+            }
+        }
         public int _remainticket;
         public int remainticket
         {

@@ -25,19 +25,23 @@ namespace PlaneUWP
     /// </summary>
     public sealed partial class UserMainPage : Page
     {
-        
+       
         string Date;
         string BeginCity;
         string ArriveCity;
+        List<string> Messages;
         public UserMainPage()
 
         {
             
             this.InitializeComponent();
+            
             ResultPage.ResultParam param = new ResultPage.ResultParam();
             param.airLines = DataBase.Instence.GetBuyedTickets(App.Instance.UserName);
             param.type = ResultPage.PageType.UserMessagePage;
             MyTicket.Navigate(Type.GetType("PlaneUWP.ResultPage"), param);
+            Messages = DataBase.Instence.GetMessage(App.Instance.UserName);
+            this.DataContext = this;
 
         }
 
@@ -63,6 +67,11 @@ namespace PlaneUWP
             var a = App.Instance.rootFrame.BackStackDepth;
             base.OnNavigatedTo(e);
             var b = App.Instance.rootFrame.BackStackDepth;
+
+        }
+
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
 
         }
     }

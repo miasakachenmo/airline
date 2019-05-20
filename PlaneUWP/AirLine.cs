@@ -18,8 +18,8 @@ namespace PlaneUWP
         public string arrivetime {
             get
             {
-                if(status.islate)
-                    return (DateTime.Parse(_arrivetime.Replace(".", ":")) + new TimeSpan(0, 0, Int32.Parse(status.newtime), 0, 0)).ToString("hh:mm");
+                //if(status.islate)
+               //     return (DateTime.Parse(_arrivetime.Replace(".", ":")) + new TimeSpan(0, 0, Int32.Parse(status.newtime), 0, 0)).ToString("hh:mm");
                 return _arrivetime;
             }
             set
@@ -47,8 +47,21 @@ namespace PlaneUWP
         public string arrivecity;
 
         public string date;
-        public Status status;
-
+        public Status _status;
+        public Status status
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                value.father=this;
+                _status = value;
+                
+            }
+        }
+        
         public Visibility Seeable
         {
             get
@@ -65,12 +78,27 @@ namespace PlaneUWP
         {
             get
             {
-                return status.islate ? "是" : "否";
+                if (status.islate)
+                    return status.newtime + "分";
+                return "否";
+            }
+            set
+            {
+
             }
         }
         public class Status
         {
-            public bool islate=false;
+
+            public AirLine father;
+            public bool _islate=false;
+            public bool islate { get { return _islate; } set
+                {
+                    _islate = value;
+                    if(father!=null)
+                        father.PropertyChanged(father, new PropertyChangedEventArgs("islatestr"));
+                }
+            }
             public bool iscanceled=false;
             public string newtime="";
         }

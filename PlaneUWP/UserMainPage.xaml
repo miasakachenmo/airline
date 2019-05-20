@@ -7,7 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
     <Grid>
 <Grid.ColumnDefinitions>
             <ColumnDefinition  Width="1*"></ColumnDefinition>
@@ -17,7 +16,13 @@
             <StackPanel Height="200">
                 <TextBlock Text="通知" FontSize="20dip" HorizontalAlignment="Left" Margin="10"></TextBlock>
                 <Line X1="10" X2="20000" Y1="0" Y2="0" Stroke="CornflowerBlue"  StrokeThickness="6"></Line>
-                
+                <ListView ItemsSource="{x:Bind Messages}"    IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Background="White" BorderBrush="{x:Null}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <TextBlock Text="{x:Bind}" TextWrapping="Wrap"  Height="50" ></TextBlock>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackPanel>
         </StackPanel>
         <Grid Grid.Column="1">

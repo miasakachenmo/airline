@@ -128,9 +128,39 @@ namespace PlaneUWP
             string tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
             ExecuteNoQuery(tempo_1);
             string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",'0')";
-            ExecuteNoQuery(tempo_2);
+            ExecuteNoQuery(tempo_2);    
         }
 
+        //用户抢票
+        public void TryTicket(string UserId,string AirlineId,string Date)
+        {
+            string str = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",'1')";
+            ExecuteNoQuery(str);
+        }
+
+        //放票
+        public void GiveTicket(string AirlineId, string Date)
+        {
+            string str = $"select * from buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\" order by num limit 1";
+            MySqlDataReader mySqlDataReader = Execute(str);
+            if(mySqlDataReader.Read())
+            {
+                mySqlDataReader.Close();
+                string id = mySqlDataReader.GetString("userid");
+                string tempo_1= $"update buyticket set status='0' where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{id}\"";
+                ExecuteNoQuery(tempo_1);
+                string tempo_2 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+                ExecuteNoQuery(tempo_2);
+                string tempo_messsage = $"航班号:\"{AirlineId}\" 时间：\"{Date}\"抢票成功";
+                AddMessage(new List<string>() {id }, tempo_messsage);
+            }
+            else
+            {
+                mySqlDataReader.Close();
+                return;
+            }
+        }
+       
 
         //用户退票
         public void DelTicket(string Userid,string AirlineId, string Date)
@@ -139,6 +169,18 @@ namespace PlaneUWP
             ExecuteNoQuery(tempo_1);
             string tempo_2 = $"update airline set remainticket=remainticket+1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
             ExecuteNoQuery(tempo_2);
+            string commend = $"select * from airline where remainticket=1 and airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            MySqlDataReader mySqlDataReader = Execute(commend);
+            if(mySqlDataReader.Read())
+            {
+                mySqlDataReader.Close();
+                GiveTicket(AirlineId, Date);
+            }
+            else
+            {
+                mySqlDataReader.Close();
+                return;
+            }
         }
 
         //查询信息乘客所购买航班的延误情况

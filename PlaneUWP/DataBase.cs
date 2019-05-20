@@ -217,6 +217,12 @@ namespace PlaneUWP
             }
             return Temp;
         }
+        //插入延误信息
+        public void AddMessage(List<string> userids, string message)
+        {
+            
+
+        }
         //查到买了这张票的所有用户
         public List<string> GetUsersBuyedThisTicket(string AirlineNum, string Date)
         {

@@ -145,13 +145,13 @@ namespace PlaneUWP
             MySqlDataReader mySqlDataReader = Execute(str);
             if(mySqlDataReader.Read())
             {
-                mySqlDataReader.Close();
                 string id = mySqlDataReader.GetString("userid");
+                mySqlDataReader.Close();
                 string tempo_1= $"update buyticket set status='0' where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{id}\"";
                 ExecuteNoQuery(tempo_1);
                 string tempo_2 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
                 ExecuteNoQuery(tempo_2);
-                string tempo_messsage = $"航班号:\"{AirlineId}\" 时间：\"{Date}\"抢票成功";
+                string tempo_messsage = $"航班号：{AirlineId} 时间：{Date}抢票成功";
                 AddMessage(new List<string>() {id }, tempo_messsage);
             }
             else

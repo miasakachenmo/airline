@@ -44,6 +44,7 @@ namespace PlaneUWP
                 newAirLine.begincity = mySqlDataReader.GetString("begincity");
                 newAirLine.begintime = mySqlDataReader.GetString("begintime");
                 newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
+                newAirLine.price = mySqlDataReader.GetInt32("price");
                 airLines.Add(newAirLine);
             }
             mySqlDataReader.Close();
@@ -93,6 +94,7 @@ namespace PlaneUWP
                 newAirLine.begincity = mySqlDataReader.GetString("begincity");
                 newAirLine.begintime = mySqlDataReader.GetString("begintime");
                 newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
+                newAirLine.price = mySqlDataReader.GetInt32("price");
                 airLines.Add(newAirLine);
             }
             mySqlDataReader.Close();
@@ -141,7 +143,7 @@ namespace PlaneUWP
         //放票
         public void GiveTicket(string AirlineId, string Date)
         {
-            string str = $"select * from buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\" order by num limit 1";
+            string str = $"select * from buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and status=1 order by num limit 1";
             MySqlDataReader mySqlDataReader = Execute(str);
             if(mySqlDataReader.Read())
             {
@@ -221,7 +223,7 @@ namespace PlaneUWP
             else
             {
 
-                string str = $"insert into airlinebackup.airline values (\"{airline.comp}\",\"{airline.airlinenum}\",\"{airline.begintime}\",\"{airline.arrivetime}\",\"{airline.remainticket}\",\"{airline.cross}\",\"{airline.begincity}\",\"{airline.arrivecity}\")";
+                string str = $"insert into airlinebackup.airline values (\"{airline.comp}\",\"{airline.airlinenum}\",\"{airline.begintime}\",\"{airline.arrivetime}\",\"{airline.remainticket}\",\"{airline.cross}\",\"{airline.begincity}\",\"{airline.arrivecity}\",\"{airline.price}\")";
                 ExecuteNoQuery(str);
                 string str_1 = $"insert into airline.airline select* from airlinebackup.airline inner join airline.date where airlinebackup.airline.airlinenum=\"{airline.airlinenum}\"";
                 ExecuteNoQuery(str_1);

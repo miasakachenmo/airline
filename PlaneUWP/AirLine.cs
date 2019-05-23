@@ -54,7 +54,7 @@ namespace PlaneUWP
             }
         }
         public string cross;
-
+        public int price;
         public string begincity;
         public string arrivecity;
 

@@ -6,10 +6,42 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
+    d:DesignHeight="700"
     d:DesignWidth="400">
 
     <Grid>
+        <StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="航空公司"></TextBlock>
+                <TextBox Text="{x:Bind Mode=TwoWay, Path=airline.comp}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="航班号"></TextBlock>
+                <TextBox Text="{x:Bind Mode=TwoWay, Path=airline.airlinenum}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="起飞时间"></TextBlock>
+                <TextBox Text="{x:Bind Mode=TwoWay, Path=airline.begintime}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="降落时间"></TextBlock>
+                <TextBox Text="{x:Bind Mode=TwoWay, Path=airline.arrivetime}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="起始城市"></TextBlock>
+                <TextBox Text="{x:Bind Mode=TwoWay, Path=airline.begincity}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="到达城市"></TextBlock>
+                <TextBox Text="{x:Bind Mode=TwoWay, Path=airline.arrivecity}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="余票"></TextBlock>
+                <TextBox Text="{x:Bind Mode=TwoWay, Path=airline.remainticket}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <Button Click="Button_Click" FontSize="20" Margin="0,10,0,0" Width="150" HorizontalAlignment="Center" Content="提交" Foreground="White" Background="DodgerBlue"></Button>
+            <TextBlock Name="TipsText" TextWrapping="Wrap"   FontSize="21" Foreground="DarkCyan" TextAlignment="Center" Text="请输入合法的数据,时间格式为xx:xx(24小时制)"></TextBlock>
+        </StackPanel>
         
     </Grid>
 </UserControl>

@@ -46,13 +46,14 @@ namespace PlaneUWP
             AButton.Content = "取消航班";
             AButton.Click += async (sender, e) => {
                 DataBase.Instence.AirlineCanael(airLine.airlinenum, airLine.date);
+                father.Hide();
                 await new ContentDialog()
                 {
                     CloseButtonText = "关闭",
                     Title = $"取消成功!",
                     FullSizeDesired = false
                 }.ShowAsync();
-                father.Hide(); };
+                 };
             BButton.Content = "延误";
             BButton.Click += async (sender, e) => {
                 if (Input.Text == "")
@@ -97,7 +98,15 @@ namespace PlaneUWP
             else
             {
                 AButton.Content = "抢票";
-                AButton.Click += (sender, e) => { father.Hide(); };
+                AButton.Click += async (sender, e) => {
+                    DataBase.Instence.AddTicket(App.Instance.UserName,airLine.airlinenum,airLine.date,"1");
+                    await new ContentDialog()
+                    {
+                        CloseButtonText = "关闭",
+                        Title = $"已经加入抢票列表",
+                        FullSizeDesired = false
+                    }.ShowAsync();
+                    father.Hide(); };
             }
             
 

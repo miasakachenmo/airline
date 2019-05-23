@@ -14,7 +14,19 @@ namespace PlaneUWP
         public string airlinenum;
         public string begintime;
         public string _arrivetime;
-
+        public AirLine()
+        {
+            comp = "";
+            airlinenum = "";
+            begintime = "";
+            arrivetime = "";
+            begincity = "";
+            arrivecity = "";
+            _remainticket = 0;
+            date = "";
+            status = new Status() { father = this,_islate=false,iscanceled=false,newtime="" };
+            
+        }
         public string arrivetime {
             get
             {

@@ -26,9 +26,16 @@ namespace PlaneUWP
         {
             this.InitializeComponent();
         }
-        private void Create_AirLine(object sender, RoutedEventArgs e)
+        private async void Create_AirLine(object sender, RoutedEventArgs e)
         {
-            
+            var a = new AirLine();
+            a.airlinenum = "test";
+            a.comp = "hahaha";
+            a.begincity = "长春";
+            var temp = new ContentDialog();
+            temp.Content = new CreateAirLine(temp, a);
+            await temp.ShowAsync();
+
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {

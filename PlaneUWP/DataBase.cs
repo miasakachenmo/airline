@@ -29,7 +29,7 @@ namespace PlaneUWP
         //已经买到的票
         public List<AirLine> GetBuyedTickets(string UserName)
         {
-            string Exe = $"select * from airline natural join buyticket where userid=\"{UserName}\"";
+            string Exe = $"select * from airline natural join buyticket where userid=\"{UserName}\" and status=\"{0}\"";
             List<AirLine> airLines = new List<AirLine>();
             MySqlDataReader mySqlDataReader = Execute(Exe);
 
@@ -122,13 +122,22 @@ namespace PlaneUWP
         
 
 
-        //用户买票，正常买票status为0
-        public void AddTicket(string UserId,string AirlineId,string Date)
+        //用户买票，正常买票status为0,qi抢票status为1
+        public void AddTicket(string UserId,string AirlineId,string Date,string status="0")
         {
-            string tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
-            ExecuteNoQuery(tempo_1);
-            string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",'0')";
-            ExecuteNoQuery(tempo_2);
+            if(status=="0")
+            {
+                string tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+                ExecuteNoQuery(tempo_1);
+                string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",\"{status}\")";
+                ExecuteNoQuery(tempo_2);
+            }
+            else
+            {
+                string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",\"{status}\")";
+                ExecuteNoQuery(tempo_2);
+            }
+            
         }
 
 

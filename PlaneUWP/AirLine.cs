@@ -27,6 +27,18 @@ namespace PlaneUWP
             status = new Status() { father = this,_islate=false,iscanceled=false,newtime="" };
             
         }
+        //飞行时间:分钟
+        public int flytime
+        {
+            get
+            {
+                string[] time1= begintime.Replace(".", ":").Split(":");
+                string[] time2 = arrivetime.Replace(".", ":").Split(":");
+                int m1 = int.Parse(time1[1]) + int.Parse(time1[0]) * 60;
+                int m2 = int.Parse(time2[1]) + int.Parse(time2[0]) * 60; 
+                return m2-m1;
+            }
+        }
         public string arrivetime {
             get
             {

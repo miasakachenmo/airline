@@ -43,7 +43,7 @@ namespace PlaneUWP
             
             param.airLines = DataBase.Instence.QueryAirline(BeginCityText.Text, ArriveCityText.Text, DateText.Text);
             param.type = ResultPage.PageType.AdminSearchPage;
-            DataPresenter.Navigate(Type.GetType("PlaneUWP.ResultPage"), param);
+            DataPresenter.Navigate(Type.GetType("PlaneUWP.ResultPage_AdminMain"), param);
         }
     }
 }

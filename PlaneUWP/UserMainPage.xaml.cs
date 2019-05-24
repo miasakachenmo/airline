@@ -39,7 +39,7 @@ namespace PlaneUWP
             ResultPage.ResultParam param = new ResultPage.ResultParam();
             param.airLines = DataBase.Instence.GetBuyedTickets(App.Instance.UserName);
             param.type = ResultPage.PageType.UserMessagePage;
-            MyTicket.Navigate(Type.GetType("PlaneUWP.ResultPage"), param);
+            MyTicket.Navigate(Type.GetType("PlaneUWP.ResultPage_UserMain"), param);
             Messages = DataBase.Instence.GetMessage(App.Instance.UserName);
             this.DataContext = this;
 

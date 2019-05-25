@@ -2,6 +2,7 @@
 using System;
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -29,7 +30,7 @@ namespace PlaneUWP
         string Date;
         string BeginCity;
         string ArriveCity;
-        List<string> Messages;
+        ObservableCollection<string> Messages;
         public UserMainPage()
 
         {
@@ -40,7 +41,7 @@ namespace PlaneUWP
             param.airLines = DataBase.Instence.GetBuyedTickets(App.Instance.UserName);
             param.type = ResultPage.PageType.UserMessagePage;
             MyTicket.Navigate(Type.GetType("PlaneUWP.ResultPage_UserMain"), param);
-            Messages = DataBase.Instence.GetMessage(App.Instance.UserName);
+            Messages = new ObservableCollection<string>(DataBase.Instence.GetMessage(App.Instance.UserName));
             this.DataContext = this;
 
         }

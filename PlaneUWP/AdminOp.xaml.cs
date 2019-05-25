@@ -48,7 +48,7 @@ namespace PlaneUWP
         {
             AButton.Content = "取消航班";
             AButton.Click += async (sender, e) => {
-                DataBase.Instence.AirlineCanael(airLine.airlinenum, airLine.date);
+                DataBase.Instence.AirlineCanael(airLine);
                 father.Hide();
                 await new ContentDialog()
                 {

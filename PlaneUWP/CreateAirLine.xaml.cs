@@ -44,6 +44,10 @@ namespace PlaneUWP
                 return false;
             if (airline.remainticket < 0)
                 return false;
+            if(airline.price==0)
+            {
+                return false;
+            }
 
             return true;
         }

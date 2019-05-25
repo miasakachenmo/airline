@@ -189,9 +189,15 @@ namespace PlaneUWP
         public List<string> GetMessage(string Userid)
         {
             List<string> Temp = new List<string>();
-            string sqlstr = $"select message from message where userid=\"{Userid}\"";
+            string sqlstr = $"select * from message where userid=\"{Userid}\"";
             mySqlDataReader = Execute(sqlstr);
 
+       //   for(int i=0;i<5;i++)
+       //   {
+       //       bool a=mySqlDataReader.Read();
+       //       
+       //       Temp.Add(mySqlDataReader.GetString("message"));
+       //   }
             while(mySqlDataReader.Read())
             {
                 Temp.Add(mySqlDataReader.GetString("message"));
@@ -232,10 +238,26 @@ namespace PlaneUWP
             }
         }
         //航班取消
-        public void AirlineCanael(string AirlineId,string Date)
+        public void AirlineCanael(AirLine airLine)
         {
+            string AirlineId = airLine.airlinenum;
+            string Date = airLine.date;
             string str = $"replace into airlinestatus values (\"{AirlineId}\",\"{Date}\",'canceled','0')";
+
             ExecuteNoQuery(str);
+            //先取得受影响的用户ID
+            var UseridList = GetUsersBuyedThisTicket(AirlineId, Date);
+            string SubAirLine = GetNearAirLine(airLine);
+            string Message;
+            if (SubAirLine != null)
+            {
+                Message = $"您好,您在{Date}的航班{AirlineId}已经取消,您可以选择搭乘最近的航班{SubAirLine}";
+            }
+            else
+            {
+                Message = $"您好,您在{Date}的航班{AirlineId}已经取消,请谅解";
+            }
+            AddMessage(UseridList, Message);
         }
 
         //修改内存里的航班->修改数据库里的航班状态->插入消息
@@ -270,7 +292,7 @@ namespace PlaneUWP
         public string GetNearAirLine(AirLine airLine)
         {
             //List<string> temp=new List<string>();
-            string Search = $"SELECT * FROM airline Left join airlinestatus on(airline.airlinenum=airlinestatus.airlinenum and airline.date=airlinestatus.date) where airline.begincity =\"{airLine.begincity}\" and airline.arrivecity=\"{airLine.arrivecity}\" and airline.date=\"{airLine.date}\" and airline.airlinenum!=\"{airLine.airlinenum}\" and airlinestatus.status is NULL ";
+            string Search = $"SELECT * FROM airline Left join airlinestatus on(airline.airlinenum=airlinestatus.airlinenum and airline.date=airlinestatus.date) where airline.begincity =\"{airLine.begincity}\" and airline.arrivecity=\"{airLine.arrivecity}\" and airline.date=\"{airLine.date}\" and airline.airlinenum!=\"{airLine.airlinenum}\" and airlinestatus.status is NULL";
             mySqlDataReader = Execute(Search);
             string Temp = null;
             if (mySqlDataReader.Read())

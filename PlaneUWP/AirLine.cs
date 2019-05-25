@@ -24,6 +24,7 @@ namespace PlaneUWP
             arrivecity = "";
             _remainticket = 0;
             date = "";
+            price = 0;
             status = new Status() { father = this,_islate=false,iscanceled=false,newtime="" };
             
         }

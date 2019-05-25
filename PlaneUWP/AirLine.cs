@@ -14,7 +14,32 @@ namespace PlaneUWP
         public string airlinenum;
         public string begintime;
         public string _arrivetime;
-
+        public AirLine()
+        {
+            comp = "";
+            airlinenum = "";
+            begintime = "";
+            arrivetime = "";
+            begincity = "";
+            arrivecity = "";
+            _remainticket = 0;
+            date = "";
+            price = 0;
+            status = new Status() { father = this,_islate=false,iscanceled=false,newtime="" };
+            
+        }
+        //飞行时间:分钟
+        public int flytime
+        {
+            get
+            {
+                string[] time1= begintime.Replace(".", ":").Split(":");
+                string[] time2 = arrivetime.Replace(".", ":").Split(":");
+                int m1 = int.Parse(time1[1]) + int.Parse(time1[0]) * 60;
+                int m2 = int.Parse(time2[1]) + int.Parse(time2[0]) * 60; 
+                return m2-m1;
+            }
+        }
         public string arrivetime {
             get
             {
@@ -42,7 +67,7 @@ namespace PlaneUWP
             }
         }
         public string cross;
-
+        public int price;
         public string begincity;
         public string arrivecity;
 

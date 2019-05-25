@@ -145,6 +145,12 @@
       <DependentUpon>ResultPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataBase.cs" />
+    <Compile Include="ResultPage_AdminMain.xaml.cs">
+      <DependentUpon>ResultPage_AdminMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ResultPage_UserMain.xaml.cs">
+      <DependentUpon>ResultPage_UserMain.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserMainPage.xaml.cs">
       <DependentUpon>UserMainPage.xaml</DependentUpon>
     </Compile>
@@ -195,6 +201,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ResultPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResultPage_AdminMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResultPage_UserMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

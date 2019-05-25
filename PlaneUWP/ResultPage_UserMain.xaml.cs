@@ -1,15 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.UI;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -17,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using static PlaneUWP.ResultPage;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -25,16 +22,9 @@ namespace PlaneUWP
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    class OList<T> : List<T>, INotifyCollectionChanged
+    public sealed partial class ResultPage_UserMain : Page
     {
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-    }
-    public sealed partial class ResultPage : Page
-    {
-        ObservableCollection<AirLine> b;
         ObservableCollection<AirLine> airLines;
-
         StackPanel[] stackPanels;
 
 
@@ -43,10 +33,12 @@ namespace PlaneUWP
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            base.OnNavigatedTo(e);
-            type = PageType.UserSearchPage;
 
-            var temp = ((ResultParam)e.Parameter).airLines;
+            base.OnNavigatedTo(e);
+            type = PageType.UserMessagePage;
+            //type = ((ResultParam)e.Parameter).type;
+            //UserMainPage看不见余票(已设置
+            var temp= ((ResultParam)e.Parameter).airLines;
             airLines = new ObservableCollection<AirLine>(temp);
 
             foreach (AirLine airLine in airLines)
@@ -56,14 +48,7 @@ namespace PlaneUWP
 
         }
 
-        public enum PageType { UserMessagePage, UserSearchPage, AdminSearchPage };
-        public class ResultParam
-        {
-
-            public List<AirLine> airLines;
-            public PageType type;
-
-        }
+       
         /*
         public void AddLine(AirLine airLine)
         {
@@ -142,7 +127,7 @@ namespace PlaneUWP
         }
         */
 
-        public ResultPage()
+        public ResultPage_UserMain()
         {
             this.InitializeComponent();
             this.DataContext = this;
@@ -160,66 +145,8 @@ namespace PlaneUWP
                 Title = $"输入你希望对{temp.date}航班{temp.airlinenum}进行的操作",
                 FullSizeDesired = false
             };
-            contentDialog.Content = new AdminOp(contentDialog, temp);
+            contentDialog.Content = new AdminOp(contentDialog,temp,airLines);
             await contentDialog.ShowAsync();
         }
-
-
-
-        public int Order=1;//0升序,1降序
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string Item = (string)((ComboBox)sender).SelectedValue;
-            OrderByProName(Item);
-            SelectionChangedEventArgs a = e;
-            int o = 2;
-            return;
-        }
-        public void OrderByProName(string Item)
-        {
-            switch (Item)
-            {
-                case "余票":
-                    ObSort(airLines, (a1, a2) => { return a1._remainticket > a2._remainticket; });
-                    break;
-                case "票价":
-                    ObSort(airLines, (a1, a2) => { return a1.price > a2.price; });
-                    break;
-                case "时间":
-                    ObSort(airLines, (a1, a2) => { return a1.flytime > a2.flytime; });
-                    break;
-
-            }
-        }
-        
-        public delegate bool SortMethod(AirLine a1, AirLine a2);
-         
-        public void ObSort(ObservableCollection<AirLine> airLines,SortMethod Sort)
-        {
-            AirLine temp;
-            bool CompareResult;
-            for (int i = 0; i < airLines.Count; i++)
-            {
-                for (int j = 0; j < airLines.Count - i - 1; j++)
-                {
-                    CompareResult = Sort(airLines[j], airLines[j + 1]);
-                    if ((CompareResult && Order == 1)|  ((!CompareResult)&&(Order!=1))  )
-                    {
-                        temp = airLines[j];
-                        airLines[j] = airLines[j + 1];
-                        airLines[j + 1] = temp;
-                    }
-                }
-                    
-            }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Order = (Order + 1) % 2;
-            OrderByProName((string)Select.SelectedValue);
-            ((Button)sender).Content = Order == 1 ? "升" : "降";
-        }
     }
-    
 }

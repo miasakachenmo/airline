@@ -37,9 +37,9 @@ namespace PlaneUWP
         //已经买到的票
         public List<AirLine> GetBuyedTickets(string UserName)
         {
-            string Exe = $"select * from airline natural join buyticket where userid=\"{UserName}\"";
+            string Exe = $"select * from airline natural join buyticket where userid=\"{UserName}\" and status=\"{0}\"";
             List<AirLine> airLines = new List<AirLine>();
-            MySqlDataReader mySqlDataReader = Execute(Exe);
+            mySqlDataReader = Execute(Exe);
 
             while (mySqlDataReader.Read())
             {
@@ -52,6 +52,7 @@ namespace PlaneUWP
                 newAirLine.begincity = mySqlDataReader.GetString("begincity");
                 newAirLine.begintime = mySqlDataReader.GetString("begintime");
                 newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
+                newAirLine.price = mySqlDataReader.GetInt32("price");
                 airLines.Add(newAirLine);
             }
             mySqlDataReader.Close();
@@ -65,7 +66,7 @@ namespace PlaneUWP
         {
             string Exe = $"select * from airlinestatus where airlinenum=\"{AirLineNum}\" and date=\"{Date}\"";
             AirLine.Status status = new AirLine.Status();
-            MySqlDataReader mySqlDataReader = Execute(Exe);
+            mySqlDataReader = Execute(Exe);
             if(mySqlDataReader.Read())
             {
                 switch (mySqlDataReader.GetString("status"))
@@ -146,7 +147,7 @@ namespace PlaneUWP
         {
             string Exe = $"select * from airline where begincity=\"{BeginCity}\" and arrivecity=\"{ArriveCity}\" and date=\"{Date}\"";
             List<AirLine> airLines=new List<AirLine>();
-            MySqlDataReader mySqlDataReader = Execute(Exe);
+            mySqlDataReader = Execute(Exe);
             
             while (mySqlDataReader.Read())
             {
@@ -159,6 +160,7 @@ namespace PlaneUWP
                 newAirLine.begincity = mySqlDataReader.GetString("begincity");
                 newAirLine.begintime = mySqlDataReader.GetString("begintime");
                 newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
+                newAirLine.price = mySqlDataReader.GetInt32("price");
                 airLines.Add(newAirLine);
             }
             mySqlDataReader.Close();
@@ -173,7 +175,7 @@ namespace PlaneUWP
         public bool isbuy(string UserId, string AirlineId, string Date)
         {
             string tempo = $"select * from  buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{UserId}\"";
-            MySqlDataReader mySqlDataReader = Execute(tempo);
+            mySqlDataReader = Execute(tempo);
             if (mySqlDataReader.Read())
             {
                 mySqlDataReader.Close();
@@ -188,8 +190,8 @@ namespace PlaneUWP
         
 
 
-        //用户买票，正常买票status为0
-        public void AddTicket(string UserId,string AirlineId,string Date)
+        //用户买票，正常买票status为0,qi抢票status为1
+        public void AddTicket(string UserId,string AirlineId,string Date,string status="0")
         {
             string tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
             ExecuteNoQuery(tempo_1);
@@ -207,17 +209,17 @@ namespace PlaneUWP
         //放票
         public void GiveTicket(string AirlineId, string Date)
         {
-            string str = $"select * from buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\" order by num limit 1";
-            MySqlDataReader mySqlDataReader = Execute(str);
+            string str = $"select * from buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and status=1 order by num limit 1";
+            mySqlDataReader = Execute(str);
             if(mySqlDataReader.Read())
             {
-                mySqlDataReader.Close();
                 string id = mySqlDataReader.GetString("userid");
+                mySqlDataReader.Close();
                 string tempo_1= $"update buyticket set status='0' where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{id}\"";
                 ExecuteNoQuery(tempo_1);
                 string tempo_2 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
                 ExecuteNoQuery(tempo_2);
-                string tempo_messsage = $"航班号:\"{AirlineId}\" 时间：\"{Date}\"抢票成功";
+                string tempo_messsage = $"航班号：{AirlineId} 时间：{Date}抢票成功";
                 AddMessage(new List<string>() {id }, tempo_messsage);
             }
             else
@@ -236,7 +238,7 @@ namespace PlaneUWP
             string tempo_2 = $"update airline set remainticket=remainticket+1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
             ExecuteNoQuery(tempo_2);
             string commend = $"select * from airline where remainticket=1 and airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
-            MySqlDataReader mySqlDataReader = Execute(commend);
+            mySqlDataReader = Execute(commend);
             if(mySqlDataReader.Read())
             {
                 mySqlDataReader.Close();
@@ -253,20 +255,27 @@ namespace PlaneUWP
         public List<string> GetMessage(string Userid)
         {
             List<string> Temp = new List<string>();
-            string sqlstr = $"select message from message where userid=\"{Userid}\"";
-            MySqlDataReader mySqlDataReader = Execute(sqlstr);
+            string sqlstr = $"select * from message where userid=\"{Userid}\"";
+            mySqlDataReader = Execute(sqlstr);
 
+       //   for(int i=0;i<5;i++)
+       //   {
+       //       bool a=mySqlDataReader.Read();
+       //       
+       //       Temp.Add(mySqlDataReader.GetString("message"));
+       //   }
             while(mySqlDataReader.Read())
             {
                 Temp.Add(mySqlDataReader.GetString("message"));
             }
+            mySqlDataReader.Close();
             return Temp;
         }
         //检查是否有相同航班(检测航班号应该就行)
         public bool HasSameAirline(AirLine airline)
         {
             string str = $"select * from airline where airlinenum=\"{airline.airlinenum}\"";
-            MySqlDataReader mySqlDataReader = Execute(str);
+            mySqlDataReader = Execute(str);
             if (mySqlDataReader.Read())
             {
                 mySqlDataReader.Close();
@@ -287,7 +296,7 @@ namespace PlaneUWP
             else
             {
 
-                string str = $"insert into airlinebackup.airline values (\"{airline.comp}\",\"{airline.airlinenum}\",\"{airline.begintime}\",\"{airline.arrivetime}\",\"{airline.remainticket}\",\"{airline.cross}\",\"{airline.begincity}\",\"{airline.arrivecity}\")";
+                string str = $"insert into airlinebackup.airline values (\"{airline.comp}\",\"{airline.airlinenum}\",\"{airline.begintime}\",\"{airline.arrivetime}\",\"{airline.remainticket}\",\"{airline.cross}\",\"{airline.begincity}\",\"{airline.arrivecity}\",\"{airline.price}\")";
                 ExecuteNoQuery(str);
                 string str_1 = $"insert into airline.airline select* from airlinebackup.airline inner join airline.date where airlinebackup.airline.airlinenum=\"{airline.airlinenum}\"";
                 ExecuteNoQuery(str_1);
@@ -295,10 +304,26 @@ namespace PlaneUWP
             }
         }
         //航班取消
-        public void AirlineCanael(string AirlineId,string Date)
+        public void AirlineCanael(AirLine airLine)
         {
+            string AirlineId = airLine.airlinenum;
+            string Date = airLine.date;
             string str = $"replace into airlinestatus values (\"{AirlineId}\",\"{Date}\",'canceled','0')";
+
             ExecuteNoQuery(str);
+            //先取得受影响的用户ID
+            var UseridList = GetUsersBuyedThisTicket(AirlineId, Date);
+            string SubAirLine = GetNearAirLine(airLine);
+            string Message;
+            if (SubAirLine != null)
+            {
+                Message = $"您好,您在{Date}的航班{AirlineId}已经取消,您可以选择搭乘最近的航班{SubAirLine}";
+            }
+            else
+            {
+                Message = $"您好,您在{Date}的航班{AirlineId}已经取消,请谅解";
+            }
+            AddMessage(UseridList, Message);
         }
 
         //修改内存里的航班->修改数据库里的航班状态->插入消息
@@ -333,8 +358,8 @@ namespace PlaneUWP
         public string GetNearAirLine(AirLine airLine)
         {
             //List<string> temp=new List<string>();
-            string Search = $"SELECT * FROM airline Left join airlinestatus on(airline.airlinenum=airlinestatus.airlinenum and airline.date=airlinestatus.date) where airline.begincity =\"{airLine.begincity}\" and airline.arrivecity=\"{airLine.arrivecity}\" and airline.date=\"{airLine.date}\" and airline.airlinenum!=\"{airLine.airlinenum}\" and airlinestatus.status is NULL ";
-            MySqlDataReader mySqlDataReader = Execute(Search);
+            string Search = $"SELECT * FROM airline Left join airlinestatus on(airline.airlinenum=airlinestatus.airlinenum and airline.date=airlinestatus.date) where airline.begincity =\"{airLine.begincity}\" and airline.arrivecity=\"{airLine.arrivecity}\" and airline.date=\"{airLine.date}\" and airline.airlinenum!=\"{airLine.airlinenum}\" and airlinestatus.status is NULL";
+            mySqlDataReader = Execute(Search);
             string Temp = null;
             if (mySqlDataReader.Read())
             {
@@ -360,7 +385,7 @@ namespace PlaneUWP
         {
             List<string> temp = new List<string>();
             string SearchStr = $"select userid from buyticket where airlinenum=\"{AirlineNum}\" and date=\"{Date}\"";
-            MySqlDataReader mySqlDataReader = Execute(SearchStr);
+            mySqlDataReader = Execute(SearchStr);
             while (mySqlDataReader.Read())
             {
                 temp.Add(mySqlDataReader.GetString("userid"));
@@ -372,7 +397,7 @@ namespace PlaneUWP
         public bool IsAdmin(string Userid)
         {
             string str = $"select usertype from user where userid=\"{Userid}\"";
-            MySqlDataReader mySqlDataReader = Execute(str);
+            mySqlDataReader = Execute(str);
             if (mySqlDataReader.Read())
             {
                 string type = mySqlDataReader.GetString("usertype");
@@ -390,7 +415,7 @@ namespace PlaneUWP
         public bool isPassword(string Userid,string Password)
         {
             string str = $"select password from user where userid=\"{Userid}\"";
-            MySqlDataReader mySqlDataReader = Execute(str);
+            mySqlDataReader = Execute(str);
             if (!mySqlDataReader.Read())
                 return false;
             else
@@ -429,7 +454,7 @@ namespace PlaneUWP
 
         MySqlConnection sqlConnection;
 
-
+        MySqlDataReader mySqlDataReader;
         public  DataBase()
         {
             sqlConnection = new MySqlConnection(ConnectString);

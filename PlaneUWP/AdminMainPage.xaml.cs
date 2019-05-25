@@ -26,9 +26,16 @@ namespace PlaneUWP
         {
             this.InitializeComponent();
         }
-        private void Create_AirLine(object sender, RoutedEventArgs e)
+        private async void Create_AirLine(object sender, RoutedEventArgs e)
         {
-            
+            var a = new AirLine();
+            a.airlinenum = "test";
+            a.comp = "hahaha";
+            a.begincity = "长春";
+            var temp = new ContentDialog();
+            temp.Content = new CreateAirLine(temp, a);
+            await temp.ShowAsync();
+
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -36,7 +43,7 @@ namespace PlaneUWP
             
             param.airLines = DataBase.Instence.QueryAirline(BeginCityText.Text, ArriveCityText.Text, DateText.Text);
             param.type = ResultPage.PageType.AdminSearchPage;
-            DataPresenter.Navigate(Type.GetType("PlaneUWP.ResultPage"), param);
+            DataPresenter.Navigate(Type.GetType("PlaneUWP.ResultPage_AdminMain"), param);
         }
     }
 }

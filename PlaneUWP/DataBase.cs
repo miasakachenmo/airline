@@ -6,6 +6,7 @@ namespace PlaneUWP
 {
     public class DataBase
     {
+        
         private static DataBase instence;
         public static DataBase Instence
         {
@@ -20,6 +21,13 @@ namespace PlaneUWP
                 instence = value;
             }
         }
+        /*public class City
+        {
+            public string name;
+            public string date;
+            public List<AirLine> airLines;
+            public City(string name, string date) { airLines = Instence.QueryAirlineBeginCity(name, date); this.name = name; this.date = date; }
+        }*/
 
         string ConnectStringLocal = "server=localhost;port=3306;user=airline;password=1234;database=airline;";
 
@@ -75,6 +83,64 @@ namespace PlaneUWP
             return status;
             
         }
+        //判断是否有直达
+        public bool isHaveStright(string BeginCity, string ArriveCity, string Date)
+        {
+            string commend = $"select * from airline where begincity=\"{BeginCity}\" and arrivecity=\"{ArriveCity}\" and date=\"{Date}\"";
+            MySqlDataReader reader = Execute(commend);
+            if(reader.Read())
+            {
+                reader.Close();
+                return true;
+            }
+            else
+            {
+                reader.Close();
+                return false;
+            }
+        }
+        //Dijkstra
+        /*public List<AirLine> RecommendAirline(string BeginCity,string ArriveCity,string Date)
+        {
+            string initialCity = $"select * from citys ";
+            List<City> Citys=new List<City>();
+            MySqlDataReader reader = Execute(initialCity);
+            while(reader.Read())
+            {
+                City city = new City(reader.GetString("city"),Date);
+                Citys.Add(city);
+            }
+
+            reader.Close();
+        }*/
+        //查询一个城市所有发出的航线
+        public List<AirLine> QueryAirlineBeginCity(string BeginCity, string Date)
+        {
+            string Exe = $"select * from airline where begincity=\"{BeginCity}\"and date=\"{Date}\"";
+            List<AirLine> airLines = new List<AirLine>();
+            MySqlDataReader mySqlDataReader = Execute(Exe);
+
+            while (mySqlDataReader.Read())
+            {
+                AirLine newAirLine = new AirLine();
+                newAirLine.arrivetime = mySqlDataReader.GetString("arrivetime");
+                newAirLine.date = mySqlDataReader.GetString("date");
+                newAirLine.comp = mySqlDataReader.GetString("comp");
+                newAirLine.airlinenum = mySqlDataReader.GetString("airlinenum");
+                newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");
+                newAirLine.begincity = mySqlDataReader.GetString("begincity");
+                newAirLine.begintime = mySqlDataReader.GetString("begintime");
+                newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
+                airLines.Add(newAirLine);
+            }
+            mySqlDataReader.Close();
+            foreach (AirLine newAirLine in airLines)
+            {
+                newAirLine.status = GetStatus(newAirLine.airlinenum, newAirLine.date);
+            }
+            return airLines;
+        }
+
         //查询航线
         public List<AirLine> QueryAirline(string BeginCity,string ArriveCity,string Date)
         {

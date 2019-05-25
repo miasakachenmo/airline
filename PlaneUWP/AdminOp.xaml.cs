@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -21,8 +22,10 @@ namespace PlaneUWP
     {
         public AirLine airLine;
         ContentDialog father;
-        public AdminOp(ContentDialog contentDialog,AirLine _airLine)
+        ObservableCollection<AirLine> airLines;
+        public AdminOp(ContentDialog contentDialog,AirLine _airLine,ObservableCollection<AirLine> _airLines=null)
         {
+            airLines = _airLines;
             airLine = _airLine;
             this.InitializeComponent();
             father = contentDialog;
@@ -71,7 +74,15 @@ namespace PlaneUWP
         public void UserMessagePage()
         {
             AButton.Content = "退票";
-            AButton.Click += (sender, e) => { father.Hide(); };
+            AButton.Click += async (sender, e) => { DataBase.Instence.DelTicket(App.Instance.UserName,airLine.airlinenum,airLine.date); father.Hide();
+            await new ContentDialog()
+                {
+                    CloseButtonText = "关闭",
+                    Title = $"退票成功!",
+                    FullSizeDesired = false
+                }.ShowAsync();
+                airLines.Remove(airLine);
+            };
 
             BButton.Visibility = Visibility.Collapsed;
             Input.Visibility = Visibility.Collapsed;

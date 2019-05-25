@@ -93,13 +93,14 @@
             <StackPanel Grid.Column="9" Name="Price">
                 <TextBlock FontSize="20" Text="票价" TextAlignment="Center"></TextBlock>
             </StackPanel>
-            <StackPanel Grid.Column="10" Name="Sort">
-                <ComboBox  PlaceholderText="排序" SelectionChanged="ComboBox_SelectionChanged">
+            <StackPanel Grid.Column="10" Name="Sort" Orientation="Horizontal">
+                <ComboBox Name="Select"  PlaceholderText="排序" SelectionChanged="ComboBox_SelectionChanged">
                     <x:String>票价</x:String>
                     <x:String>时间</x:String>
                     <x:String>余票</x:String>
-                    
+                     
                 </ComboBox>
+                <Button Content="升" Click="Button_Click"></Button>
             </StackPanel>
         </Grid>
         <ListView  Name="ResultList" IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Grid.Row="1" Grid.ColumnSpan="8" Background="White" ItemsSource="{x:Bind airLines,Mode=OneWay}" BorderBrush="{x:Null}" ItemTemplate="{StaticResource AirLineTemplate}">

@@ -166,13 +166,21 @@ namespace PlaneUWP
 
 
 
+        public int Order=1;//0升序,1降序
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string Item = (string)((ComboBox)sender).SelectedValue;
+            OrderByProName(Item);
+            SelectionChangedEventArgs a = e;
+            int o = 2;
+            return;
+        }
+        public void OrderByProName(string Item)
+        {
             switch (Item)
             {
                 case "余票":
-                    ObSort(airLines,(a1,a2)=>{ return a1._remainticket > a2._remainticket; });
+                    ObSort(airLines, (a1, a2) => { return a1._remainticket > a2._remainticket; });
                     break;
                 case "票价":
                     ObSort(airLines, (a1, a2) => { return a1.price > a2.price; });
@@ -182,14 +190,11 @@ namespace PlaneUWP
                     break;
 
             }
-            SelectionChangedEventArgs a = e;
-            int o = 2;
-            return;
         }
         
         public delegate bool SortMethod(AirLine a1, AirLine a2);
          
-        public void ObSort(ObservableCollection<AirLine> airLines,SortMethod Sort,int Descend=1)
+        public void ObSort(ObservableCollection<AirLine> airLines,SortMethod Sort)
         {
             AirLine temp;
             bool CompareResult;
@@ -198,7 +203,7 @@ namespace PlaneUWP
                 for (int j = 0; j < airLines.Count - i - 1; j++)
                 {
                     CompareResult = Sort(airLines[j], airLines[j + 1]);
-                    if ((CompareResult && Descend == 1)|  ((!CompareResult)&&(Descend!=1))  )
+                    if ((CompareResult && Order == 1)|  ((!CompareResult)&&(Order!=1))  )
                     {
                         temp = airLines[j];
                         airLines[j] = airLines[j + 1];
@@ -209,6 +214,12 @@ namespace PlaneUWP
             }
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Order = (Order + 1) % 2;
+            OrderByProName((string)Select.SelectedValue);
+            ((Button)sender).Content = Order == 1 ? "升" : "降";
+        }
     }
     
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,7 +24,7 @@ namespace PlaneUWP
     /// </summary>
     public sealed partial class ResultPage_UserMain : Page
     {
-        List<AirLine> airLines;
+        ObservableCollection<AirLine> airLines;
         StackPanel[] stackPanels;
 
 
@@ -37,7 +38,8 @@ namespace PlaneUWP
             type = PageType.UserMessagePage;
             //type = ((ResultParam)e.Parameter).type;
             //UserMainPage看不见余票(已设置
-            airLines = ((ResultParam)e.Parameter).airLines;
+            var temp= ((ResultParam)e.Parameter).airLines;
+            airLines = new ObservableCollection<AirLine>(temp);
 
             foreach (AirLine airLine in airLines)
             {
@@ -143,7 +145,7 @@ namespace PlaneUWP
                 Title = $"输入你希望对{temp.date}航班{temp.airlinenum}进行的操作",
                 FullSizeDesired = false
             };
-            contentDialog.Content = new AdminOp(contentDialog, temp);
+            contentDialog.Content = new AdminOp(contentDialog,temp,airLines);
             await contentDialog.ShowAsync();
         }
     }

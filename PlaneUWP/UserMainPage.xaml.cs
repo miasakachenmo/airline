@@ -50,7 +50,6 @@ namespace PlaneUWP
             ResultPage.ResultParam param = new ResultPage.ResultParam();
             param.airLines = new DataBase().QueryAirline("包头","北京","6.1");
             param.type = ResultPage.PageType.UserSearchPage;
-
             App.Instance.JumpTo("ResultPage", param);
         }
         private void Button_Click(object sender, RoutedEventArgs e)

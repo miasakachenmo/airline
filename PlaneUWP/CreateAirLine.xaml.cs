@@ -84,13 +84,21 @@ namespace PlaneUWP
             else
             {
                 TipsText.Text = "输入合法!";
-                DataBase.Instence.AddAirline(airline);
-                father.Hide();
-                await new ContentDialog()
+                if (DataBase.Instence.AddAirline(airline))
                 {
-                    CloseButtonText = "关闭",
-                    Title = "插入航班成功!",
-                }.ShowAsync();
+
+
+                    father.Hide();
+                    await new ContentDialog()
+                    {
+                        CloseButtonText = "关闭",
+                        Title = "插入航班成功!",
+                    }.ShowAsync();
+                }
+                else
+                {
+                    TipsText.Text = "航班号重复!!请重新输入";
+                }
             }
         }
     }

@@ -28,7 +28,7 @@
                     <TextBlock TextAlignment="Center" Grid.Column="4" Text="{x:Bind begintime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock TextAlignment="Center" Grid.Column="5" Text="{x:Bind arrivetime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock TextAlignment="Center" Grid.Column="6" Text="否"  FontSize="15" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock TextAlignment="Center" Grid.Column="7" Text="{x:Bind islatestr , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock TextAlignment="Center" Grid.Column="7" Text="{x:Bind StatusStr}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </DataTemplate>
 
@@ -73,7 +73,7 @@
                 <TextBlock FontSize="20" Text="途经" TextAlignment="Center"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="7" Name="IsLate">
-                <TextBlock FontSize="20" Text="晚点状态" TextAlignment="Center"></TextBlock>
+                <TextBlock FontSize="20" Text="状态" TextAlignment="Center"></TextBlock>
             </StackPanel>
         </Grid>
         <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Grid.Row="1" Grid.ColumnSpan="8" Background="White" ItemsSource="{x:Bind airLines}" BorderBrush="{x:Null}" ItemTemplate="{StaticResource AirLineTemplate}">

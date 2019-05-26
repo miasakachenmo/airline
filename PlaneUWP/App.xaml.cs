@@ -38,9 +38,9 @@ namespace PlaneUWP
             rootFrame.Navigate(Type.GetType("PlaneUWP." + PageName));
             if (SenderType==typeof(LoginPage))
             {
-                var a = App.Instance.rootFrame.BackStackDepth;
-                App.Instance.rootFrame.BackStack.RemoveAt(App.Instance.rootFrame.BackStackDepth - 1);
-                var b = App.Instance.rootFrame.BackStackDepth;
+                //var a = App.Instance.rootFrame.BackStackDepth;
+                //App.Instance.rootFrame.BackStack.RemoveAt(App.Instance.rootFrame.BackStackDepth - 1);
+                //var b = App.Instance.rootFrame.BackStackDepth;
             }
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
             (Window.Current.Content as Frame).CanGoBack ?
@@ -52,9 +52,9 @@ namespace PlaneUWP
             rootFrame.Navigate(Type.GetType("PlaneUWP." + PageName), Pra);
             if (SenderType == typeof(LoginPage))
             {
-                var a = App.Instance.rootFrame.BackStackDepth;
-                App.Instance.rootFrame.BackStack.RemoveAt(App.Instance.rootFrame.BackStackDepth - 1);
-                var b = App.Instance.rootFrame.BackStackDepth;
+                
+                //App.Instance.rootFrame.BackStack.RemoveAt(App.Instance.rootFrame.BackStackDepth - 1);
+                
             }
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
             (Window.Current.Content as Frame).CanGoBack ?

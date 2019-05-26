@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
@@ -10,6 +11,20 @@ namespace PlaneUWP
 {
     public class AirLine:INotifyPropertyChanged
     {
+        public static int MinusTime(string timestr1,string timestr2)
+        {
+            
+            var Result1 = Regex.Match(timestr1, "\\d{2}");
+            var Result2 = Regex.Match(timestr2, "\\d{2}");
+
+            int H1 = int.Parse(timestr1.Split(":")[0]);
+            int H2 = int.Parse(timestr2.Split(":")[0]);
+            int M1 = int.Parse(timestr1.Split(":")[1]);
+            int M2 = int.Parse(timestr2.Split(":")[1]);
+            return (H1 - H2) * 60 + (M2 - M1);
+
+        }
+
         public string comp;
         public string airlinenum;
         public string begintime;
@@ -110,6 +125,18 @@ namespace PlaneUWP
             set
             {
 
+            }
+        }
+        public string StatusStr
+        {
+            get
+            {
+                if (status.iscanceled)
+                    return "已取消";
+                if (status._islate)
+                    return "晚点"+islatestr;
+                else
+                    return "正常";
             }
         }
         public class Status

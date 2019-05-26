@@ -74,5 +74,11 @@ namespace PlaneUWP
         {
 
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            DataBase.Instence.DelAllMessage(App.Instance.UserName);
+            Messages.Clear();
+        }
     }
 }

@@ -14,7 +14,10 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
             <StackPanel>
-                <TextBlock Text="通知" FontSize="20dip" HorizontalAlignment="Left" Margin="10"></TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  Text="通知" FontSize="20dip" HorizontalAlignment="Left" Margin="10"></TextBlock>
+                    <Button Click="Button_Click_1"  Content="我知道了"></Button>
+                </StackPanel>
                 <Line X1="10" X2="20000" Y1="0" Y2="0" Stroke="CornflowerBlue"  StrokeThickness="6"></Line>
              
             </StackPanel>

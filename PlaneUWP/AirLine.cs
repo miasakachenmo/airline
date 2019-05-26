@@ -13,7 +13,8 @@ namespace PlaneUWP
     {
         public static int MinusTime(string timestr1,string timestr2)
         {
-            
+            timestr1 = timestr1.Replace(".",":");
+            timestr2 = timestr2.Replace(".", ":");
             var Result1 = Regex.Match(timestr1, "\\d{2}");
             var Result2 = Regex.Match(timestr2, "\\d{2}");
 
@@ -54,6 +55,10 @@ namespace PlaneUWP
                 int m2 = int.Parse(time2[1]) + int.Parse(time2[0]) * 60; 
                 return m2-m1;
             }
+        }
+        public int getValue()
+        {
+            return (price + this.flytime);
         }
         public string arrivetime {
             get

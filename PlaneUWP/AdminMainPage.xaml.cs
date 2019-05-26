@@ -30,10 +30,11 @@ namespace PlaneUWP
         {
             var a = new AirLine();
             a.airlinenum = "test";
-            a.comp = "hahaha";
-            a.begincity = "长春";
+            a.comp = "testcomp";
+            a.begincity = "";
             var temp = new ContentDialog();
             temp.Content = new CreateAirLine(temp, a);
+            temp.CloseButtonText = "关闭";
             await temp.ShowAsync();
 
         }

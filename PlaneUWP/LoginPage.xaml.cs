@@ -42,10 +42,12 @@ namespace PlaneUWP
 
         private  void Button_Click_UserTest(object sender ,RoutedEventArgs e)
         {
+
             Login("zhangyusong", "123");
         }
         private  void Button_Click_AdminTest(object sender, RoutedEventArgs e)
         {
+
             Login("admin", "123");
         }
         private async void Login(string UserName,string PassWord)

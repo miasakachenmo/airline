@@ -26,6 +26,45 @@ namespace PlaneUWP
         string ConnectString = "server=119.23.219.88;port=3306;user=airline;password=123;database=airline;";
 
 
+        public List<AirLine> GetDayAirLines(string date)
+        {
+            string Exe = $"select * from  airline as a left join airlinestatus as b on(a.airlinenum=b.airlinenum and a.date=b.date) where a.date=\"{date}\"";
+            List<AirLine> airLines = new List<AirLine>();
+            mySqlDataReader = Execute(Exe);
+            int i = 0;
+            while (mySqlDataReader.Read())
+            {
+                AirLine newAirLine = new AirLine();
+                newAirLine.arrivetime = mySqlDataReader.GetString("arrivetime");
+                newAirLine.date = mySqlDataReader.GetString("date");
+                newAirLine.comp = mySqlDataReader.GetString("comp");
+                newAirLine.airlinenum = mySqlDataReader.GetString("airlinenum");
+                newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");
+                newAirLine.begincity = mySqlDataReader.GetString("begincity");
+                newAirLine.begintime = mySqlDataReader.GetString("begintime");
+                newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
+                newAirLine.price = mySqlDataReader.GetInt32("price");
+                var time=mySqlDataReader.GetOrdinal("time");
+                if(!mySqlDataReader.IsDBNull(time))
+                {
+                    newAirLine.status = new AirLine.Status();
+                    switch (mySqlDataReader.GetString("status"))
+                    {
+                        case "late":
+                            newAirLine.status.islate = true;
+                            newAirLine.status.newtime = mySqlDataReader.GetString("time");
+                            break;
+                        case "canceled":
+                            newAirLine.status.iscanceled = true;
+                            break;
+                    }
+                }
+                airLines.Add(newAirLine);
+                
+            }
+            mySqlDataReader.Close();
+            return airLines;
+        }
         //已经买到的票
         public List<AirLine> GetBuyedTickets(string UserName)
         {
@@ -79,7 +118,7 @@ namespace PlaneUWP
         //查询航线
         public List<AirLine> QueryAirline(string BeginCity,string ArriveCity,string Date)
         {
-            string Exe = $"select * from airline where begincity=\"{BeginCity}\" and arrivecity=\"{ArriveCity}\" and date=\"{Date}\"";
+            string Exe = $"select * from  airline as a left join airlinestatus as b on(a.airlinenum=b.airlinenum and a.date=b.date) where a.date=\"{Date}\" and begincity=\"{BeginCity}\" and arrivecity=\"{ArriveCity}\"";
             List<AirLine> airLines=new List<AirLine>();
             mySqlDataReader = Execute(Exe);
             
@@ -95,13 +134,24 @@ namespace PlaneUWP
                 newAirLine.begintime = mySqlDataReader.GetString("begintime");
                 newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
                 newAirLine.price = mySqlDataReader.GetInt32("price");
+                var time = mySqlDataReader.GetOrdinal("time");
+                if (!mySqlDataReader.IsDBNull(time))
+                {
+                    newAirLine.status = new AirLine.Status();
+                    switch (mySqlDataReader.GetString("status"))
+                    {
+                        case "late":
+                            newAirLine.status.islate = true;
+                            newAirLine.status.newtime = mySqlDataReader.GetString("time");
+                            break;
+                        case "canceled":
+                            newAirLine.status.iscanceled = true;
+                            break;
+                    }
+                }
                 airLines.Add(newAirLine);
             }
             mySqlDataReader.Close();
-            foreach(AirLine newAirLine in airLines)
-            {
-                newAirLine.status = GetStatus(newAirLine.airlinenum, newAirLine.date);
-            }
             return airLines;
         }
         

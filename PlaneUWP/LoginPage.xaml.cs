@@ -26,6 +26,8 @@ namespace PlaneUWP
         public LoginPage()
         {
             this.InitializeComponent();
+            App.Instance.UserName = "";
+            App.Instance.UserType = "";
             /*
             var l = new List<string>();
             l.Add("zhangyusong");

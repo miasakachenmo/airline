@@ -14,28 +14,30 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition  Width="1*"></ColumnDefinition>
                         <ColumnDefinition  Width="1*"></ColumnDefinition>
-                        <ColumnDefinition  Width="1*"></ColumnDefinition>
-                        <ColumnDefinition  Width="1*"></ColumnDefinition>
-                        <ColumnDefinition  Width="1*"></ColumnDefinition>
-                        <ColumnDefinition  Width="1*"></ColumnDefinition>
-                        <ColumnDefinition  Width="1*"></ColumnDefinition>
-                        <ColumnDefinition  Width="1*"></ColumnDefinition>
-                        <ColumnDefinition  Width="1*"></ColumnDefinition>
-                        <ColumnDefinition  Width="1*"></ColumnDefinition>
                         <ColumnDefinition  Width="0.5*"></ColumnDefinition>
+                        <ColumnDefinition  Width="0.5*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="1*"></ColumnDefinition>
+                        <ColumnDefinition  Width="0.95*"></ColumnDefinition>
 
 
                     </Grid.ColumnDefinitions>
                     <TextBlock TextAlignment="Center" Grid.Column="0" Text="{x:Bind airlinenum}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock TextAlignment="Center" Grid.Column="1" Text="{x:Bind comp}" FontSize="10" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock TextAlignment="Center" Grid.Column="1" Text="{x:Bind comp}" FontSize="12" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock TextAlignment="Center" Grid.Column="2" Text="{x:Bind begincity}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock TextAlignment="Center" Grid.Column="3" Text="{x:Bind arrivecity}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock TextAlignment="Center" Grid.Column="4" Text="{x:Bind begintime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock TextAlignment="Center" Grid.Column="5" Text="{x:Bind arrivetime}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock TextAlignment="Center" Grid.Column="6" Text="否" FontSize="15" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock TextAlignment="Center" Grid.Column="7" Text="{x:Bind islatestr , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock TextAlignment="Center" Grid.Column="7" Text="{x:Bind StatusStr}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock TextAlignment="Center" Grid.Column="8" Text="{x:Bind remainticket, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock TextAlignment="Center" Grid.Column="9" Text="{x:Bind price}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock TextAlignment="Center" Grid.Column="10" Text="{x:Bind date}" FontSize="15" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </DataTemplate>
             
@@ -51,6 +53,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition  Width="1*"></ColumnDefinition>
                 <ColumnDefinition  Width="1*"></ColumnDefinition>
+                <ColumnDefinition  Width="0.5*"></ColumnDefinition>
+                <ColumnDefinition  Width="0.5*"></ColumnDefinition>
                 <ColumnDefinition  Width="1*"></ColumnDefinition>
                 <ColumnDefinition  Width="1*"></ColumnDefinition>
                 <ColumnDefinition  Width="1*"></ColumnDefinition>
@@ -59,7 +63,7 @@
                 <ColumnDefinition  Width="1*"></ColumnDefinition>
                 <ColumnDefinition  Width="1*"></ColumnDefinition>
                 <ColumnDefinition  Width="1*"></ColumnDefinition>
-                <ColumnDefinition  Width="1*"></ColumnDefinition>
+
 
             </Grid.ColumnDefinitions>
 
@@ -85,7 +89,7 @@
                 <TextBlock FontSize="20" Text="途经" TextAlignment="Center"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="7" Name="IsLate">
-                <TextBlock FontSize="20" Text="晚点状态" TextAlignment="Center"></TextBlock>
+                <TextBlock FontSize="20" Text="状态" TextAlignment="Center"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="8" Name="LastTicket">
                 <TextBlock FontSize="20" Text="余票" TextAlignment="Center"></TextBlock>
@@ -93,12 +97,14 @@
             <StackPanel Grid.Column="9" Name="Price">
                 <TextBlock FontSize="20" Text="票价" TextAlignment="Center"></TextBlock>
             </StackPanel>
-            <StackPanel Grid.Column="10" Name="Sort" Orientation="Horizontal">
+            <StackPanel Grid.Column="10" Name="Date">
+                <TextBlock FontSize="20" Text="日期" TextAlignment="Center"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="11" Name="Sort" Orientation="Horizontal">
                 <ComboBox Name="Select"  PlaceholderText="排序" SelectionChanged="ComboBox_SelectionChanged">
                     <x:String>票价</x:String>
                     <x:String>时间</x:String>
                     <x:String>余票</x:String>
-                     
                 </ComboBox>
                 <Button Content="升" Click="Button_Click"></Button>
             </StackPanel>

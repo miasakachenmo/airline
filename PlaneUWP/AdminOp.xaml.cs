@@ -109,15 +109,18 @@ namespace PlaneUWP
             else
             {
                 AButton.Content = "抢票";
+                
                 AButton.Click += async (sender, e) => {
+                    
                     DataBase.Instence.AddTicket(App.Instance.UserName,airLine.airlinenum,airLine.date,"1");
+                    father.Hide();
                     await new ContentDialog()
                     {
                         CloseButtonText = "关闭",
-                        Title = $"已经加入抢票列表",
+                        Title = $"已经加入抢票列表,抢票成功时将通知您",
                         FullSizeDesired = false
                     }.ShowAsync();
-                    father.Hide(); };
+                };
             }
             
 

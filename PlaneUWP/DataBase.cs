@@ -28,6 +28,12 @@ namespace PlaneUWP
         string ConnectString = "server=119.23.219.88;port=3306;user=airline;password=123;database=airline;";
 
 
+        public void DelAllMessage(string UserId)
+        {
+            string Exe = $"delete from message where userid=\"{UserId}\"";
+            ExecuteNoQuery(Exe);
+            return;
+        }
         public List<AirLine> GetDayAirLines(string date)
         {
             string Exe = $"select * from  airline as a left join airlinestatus as b on(a.airlinenum=b.airlinenum and a.date=b.date) where a.date=\"{date}\"";
@@ -317,6 +323,45 @@ namespace PlaneUWP
             }
             return airLines;
         }
+        //用航班号查询航线
+        public List<AirLine> QueryAirlineByAirLineNum(string airlinenum)
+        {
+            string Exe = $"select * from  airline as a left join airlinestatus as b on(a.airlinenum=b.airlinenum and a.date=b.date) where a.airlinenum=\"{airlinenum}\"";
+            List<AirLine> airLines = new List<AirLine>();
+            mySqlDataReader = Execute(Exe);
+
+            while (mySqlDataReader.Read())
+            {
+                AirLine newAirLine = new AirLine();
+                newAirLine.arrivetime = mySqlDataReader.GetString("arrivetime");
+                newAirLine.date = mySqlDataReader.GetString("date");
+                newAirLine.comp = mySqlDataReader.GetString("comp");
+                newAirLine.airlinenum = mySqlDataReader.GetString("airlinenum");
+                newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");
+                newAirLine.begincity = mySqlDataReader.GetString("begincity");
+                newAirLine.begintime = mySqlDataReader.GetString("begintime");
+                newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
+                newAirLine.price = mySqlDataReader.GetInt32("price");
+                var time = mySqlDataReader.GetOrdinal("time");
+                if (!mySqlDataReader.IsDBNull(time))
+                {
+                    newAirLine.status = new AirLine.Status();
+                    switch (mySqlDataReader.GetString("status"))
+                    {
+                        case "late":
+                            newAirLine.status.islate = true;
+                            newAirLine.status.newtime = mySqlDataReader.GetString("time");
+                            break;
+                        case "canceled":
+                            newAirLine.status.iscanceled = true;
+                            break;
+                    }
+                }
+                airLines.Add(newAirLine);
+            }
+            mySqlDataReader.Close();
+            return airLines;
+        }
 
         //查询航线
         public List<AirLine> QueryAirline(string BeginCity,string ArriveCity,string Date)
@@ -380,9 +425,13 @@ namespace PlaneUWP
         //用户买票，正常买票status为0,qi抢票status为1
         public void AddTicket(string UserId,string AirlineId,string Date,string status="0")
         {
-            string tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
-            ExecuteNoQuery(tempo_1);
-            string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",'0')";
+            string tempo_1;
+            if (status.Equals("0"))
+            {
+                tempo_1 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+                ExecuteNoQuery(tempo_1);
+            }
+            string tempo_2 = $"INSERT INTO buyticket (airlinenum,date,userid,status) VALUES (\"{AirlineId}\",\"{Date}\" ,\"{UserId}\",'{status}')";
             ExecuteNoQuery(tempo_2);    
         }
 
@@ -476,10 +525,10 @@ namespace PlaneUWP
                
         }
         //插入航班(先引用一下上一个函数判断是否是重复航班)
-        public void AddAirline(AirLine airline)
+        public bool AddAirline(AirLine airline)
         {
             if (HasSameAirline(airline))
-                return;
+                return false;
             else
             {
 
@@ -487,7 +536,7 @@ namespace PlaneUWP
                 ExecuteNoQuery(str);
                 string str_1 = $"insert into airline.airline select* from airlinebackup.airline inner join airline.date where airlinebackup.airline.airlinenum=\"{airline.airlinenum}\"";
                 ExecuteNoQuery(str_1);
-
+                return true;
             }
         }
         //航班取消
@@ -562,7 +611,7 @@ namespace PlaneUWP
             
             foreach (string userid in userids)
             {
-                sqlstr += $"insert into message value(\"{userid}\",\"{message}\");";
+                sqlstr += $"insert into message(userid,message) value(\"{userid}\",\"{message}\");";
             }
             if(sqlstr!="")
                 ExecuteNoQuery(sqlstr);

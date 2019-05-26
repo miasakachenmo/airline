@@ -74,5 +74,21 @@ namespace PlaneUWP
         {
 
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            DataBase.Instence.DelAllMessage(App.Instance.UserName);
+            Messages.Clear();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            string airlinenum = AirLineNum.Text;
+            ResultPage.ResultParam param = new ResultPage.ResultParam();
+            param.airLines = DataBase.Instence.QueryAirlineByAirLineNum(airlinenum);
+            param.type = ResultPage.PageType.UserSearchPage;
+            App.Instance.JumpTo("ResultPage", param);
+
+        }
     }
 }

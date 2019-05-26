@@ -186,6 +186,45 @@ namespace PlaneUWP
             }
             return airLines;
         }
+        //用航班号查询航线
+        public List<AirLine> QueryAirlineByAirLineNum(string airlinenum)
+        {
+            string Exe = $"select * from  airline as a left join airlinestatus as b on(a.airlinenum=b.airlinenum and a.date=b.date) where a.airlinenum=\"{airlinenum}\"";
+            List<AirLine> airLines = new List<AirLine>();
+            mySqlDataReader = Execute(Exe);
+
+            while (mySqlDataReader.Read())
+            {
+                AirLine newAirLine = new AirLine();
+                newAirLine.arrivetime = mySqlDataReader.GetString("arrivetime");
+                newAirLine.date = mySqlDataReader.GetString("date");
+                newAirLine.comp = mySqlDataReader.GetString("comp");
+                newAirLine.airlinenum = mySqlDataReader.GetString("airlinenum");
+                newAirLine.arrivecity = mySqlDataReader.GetString("arrivecity");
+                newAirLine.begincity = mySqlDataReader.GetString("begincity");
+                newAirLine.begintime = mySqlDataReader.GetString("begintime");
+                newAirLine.remainticket = mySqlDataReader.GetInt32("remainticket");
+                newAirLine.price = mySqlDataReader.GetInt32("price");
+                var time = mySqlDataReader.GetOrdinal("time");
+                if (!mySqlDataReader.IsDBNull(time))
+                {
+                    newAirLine.status = new AirLine.Status();
+                    switch (mySqlDataReader.GetString("status"))
+                    {
+                        case "late":
+                            newAirLine.status.islate = true;
+                            newAirLine.status.newtime = mySqlDataReader.GetString("time");
+                            break;
+                        case "canceled":
+                            newAirLine.status.iscanceled = true;
+                            break;
+                    }
+                }
+                airLines.Add(newAirLine);
+            }
+            mySqlDataReader.Close();
+            return airLines;
+        }
 
         //查询航线
         public List<AirLine> QueryAirline(string BeginCity,string ArriveCity,string Date)

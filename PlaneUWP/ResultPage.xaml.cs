@@ -153,15 +153,30 @@ namespace PlaneUWP
 
         private async void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            
             AirLine temp = (AirLine)e.ClickedItem;
-            var contentDialog = new ContentDialog()
+            if (temp._status.iscanceled)
             {
-                CloseButtonText = "关闭",
-                Title = $"输入你希望对{temp.date}航班{temp.airlinenum}进行的操作",
-                FullSizeDesired = false
-            };
-            contentDialog.Content = new AdminOp(contentDialog, temp);
-            await contentDialog.ShowAsync();
+                await new ContentDialog()
+                {
+                    CloseButtonText = "关闭",
+                    Title = $"航班已经取消 你不能买票!",
+                    FullSizeDesired = false
+                }.ShowAsync();
+            }
+            else
+            {
+                var contentDialog = new ContentDialog()
+                {
+                    CloseButtonText = "关闭",
+                    Title = $"输入你希望对{temp.date}航班{temp.airlinenum}进行的操作",
+                    FullSizeDesired = false
+                };
+
+                contentDialog.Content = new AdminOp(contentDialog, temp);
+                await contentDialog.ShowAsync();
+            }
+         
         }
 
 

@@ -35,6 +35,7 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
 
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
@@ -54,12 +55,16 @@
                 <Button Click="Button_Click" Height="34" Margin="5,0,5,0" Content="搜索" FontSize="13dip" ></Button>
                 <Button Click="Button_Click_Test" Content="测试" Height="34" Margin="5,0,5,0"  FontSize="13dip" ></Button>
             </StackPanel>
-            <TextBlock Grid.Row="2" Text="热门航班" HorizontalAlignment="Center" FontSize="20" Margin="10,0,0,0"></TextBlock>
-            <TextBlock Grid.Row="3" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="17" Text="重庆-北京 北京-海口 齐齐哈尔-南阳 乌鲁木齐-重庆 哈尔滨-乌鲁木齐 重庆-长春 " Margin="0,10,0,0" ></TextBlock>
-            <TextBlock Grid.Row="4" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="17" Text="河南-长春  北京-海南  成都-北京  上海-广州   成都-深圳   北京-上海   长春-青岛 " ></TextBlock>
-            <TextBlock Grid.Row="5"  Text="已购机票" FontSize="20dip" HorizontalAlignment="Left" Margin="10"></TextBlock>
-            <Line Grid.Row="6" X1="10" X2="2000" Y1="0" Y2="0" Stroke="CornflowerBlue" StrokeThickness="6"></Line>
-            <Frame Grid.Row="7" Name="MyTicket"></Frame>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <AutoSuggestBox  Name="AirLineNum" PlaceholderText="目的城市" FontSize="40dip" BorderThickness="2"   Width="150"></AutoSuggestBox>
+                <Button Click="Button_Click_2"  Height="34" Margin="5,0,5,0" Content="航班号搜索" FontSize="13dip" ></Button>
+            </StackPanel>
+            <TextBlock Grid.Row="3" Text="热门航班" HorizontalAlignment="Center" FontSize="20" Margin="10,0,0,0"></TextBlock>
+            <TextBlock Grid.Row="4" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="17" Text="重庆-北京 北京-海口 齐齐哈尔-南阳 乌鲁木齐-重庆 哈尔滨-乌鲁木齐 重庆-长春 " Margin="0,10,0,0" ></TextBlock>
+            <TextBlock Grid.Row="5" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="17" Text="河南-长春  北京-海南  成都-北京  上海-广州   成都-深圳   北京-上海   长春-青岛 " ></TextBlock>
+            <TextBlock Grid.Row="6"  Text="已购机票" FontSize="20dip" HorizontalAlignment="Left" Margin="10"></TextBlock>
+            <Line Grid.Row="7" X1="10" X2="2000" Y1="0" Y2="0" Stroke="CornflowerBlue" StrokeThickness="6"></Line>
+            <Frame Grid.Row="8" Name="MyTicket"></Frame>
         </Grid>
         <Line></Line>
     </Grid>

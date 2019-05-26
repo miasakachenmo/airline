@@ -127,6 +127,13 @@ namespace PlaneUWP
 
             }
         }
+        public bool Show
+        {
+            get
+            {
+                return !_status.iscanceled;
+            }
+        }
         public string StatusStr
         {
             get

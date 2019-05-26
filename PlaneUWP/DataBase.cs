@@ -1,7 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 namespace PlaneUWP
 {
     public class DataBase
@@ -21,13 +21,7 @@ namespace PlaneUWP
                 instence = value;
             }
         }
-        /*public class City
-        {
-            public string name;
-            public string date;
-            public List<AirLine> airLines;
-            public City(string name, string date) { airLines = Instence.QueryAirlineBeginCity(name, date); this.name = name; this.date = date; }
-        }*/
+       
 
         string ConnectStringLocal = "server=localhost;port=3306;user=airline;password=1234;database=airline;";
 
@@ -151,20 +145,254 @@ namespace PlaneUWP
                 return false;
             }
         }
-        //Dijkstra
-        /*public List<AirLine> RecommendAirline(string BeginCity,string ArriveCity,string Date)
+        public static List<string> answer = new List<string>();
+        public List<string> GetRoute(string BeginCity,string ArriveCity,string Date, List<AirLine> DayAirlines)
         {
-            string initialCity = $"select * from citys ";
-            List<City> Citys=new List<City>();
-            MySqlDataReader reader = Execute(initialCity);
-            while(reader.Read())
+            
+            List<string> city_begin = new List<string>();
+            List<string> city_arrive = new List<string>();
+            
+            foreach (AirLine airLine in DayAirlines)
             {
-                City city = new City(reader.GetString("city"),Date);
-                Citys.Add(city);
+                if(airLine.begincity.Equals(BeginCity))
+                {   
+                    if(city_begin.Contains(airLine.arrivecity))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        city_begin.Add(airLine.arrivecity);
+                    }
+                    
+                }
+                if(airLine.arrivecity.Equals(ArriveCity))
+                {  
+                    if(city_arrive.Contains(airLine.begincity))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        city_arrive.Add(airLine.begincity);
+                    }
+                    
+                }
+                if(airLine.begincity.Equals(BeginCity)&&airLine.arrivecity.Equals(ArriveCity))
+                {
+                    
+                    answer.Add(BeginCity);
+                    answer.Add(ArriveCity);
+                    return answer;
+                }
             }
+            foreach (string city in city_arrive)
+            {
+                if (city_begin.Contains(city))
+                {
+                    answer.Add(BeginCity);
+                    answer.Add(city);
+                    answer.Add(ArriveCity);
+                    
+                }
+            }
+            if(answer.Count>0)
+            {
+                return answer;
+            }
+            else
+            {
+                foreach (string city_left in city_begin)
+                {
+                    GetRoute(city_left, ArriveCity, Date, DayAirlines);
+                    
+                }
+                
+                         
+            }
+            return answer;
+        }
+        
+        public List<string> arrangeRoute(string BeginCity, string ArriveCity,string Date, List<AirLine> DayAirlines)
+        {
+            int count = 0;
+            int length =0;
+            List<string> final = new List<string>();
+            GetRoute(BeginCity, ArriveCity, Date, DayAirlines);
+            foreach (string ans in answer)
+            {   
+                if (ans.Equals(ArriveCity))
+                    count += 1;
+            }
+            length = answer.Count / count;
 
-            reader.Close();
-        }*/
+            if (length == 3&&answer[0].Equals(BeginCity))
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    final.Add("");
+                }
+            }
+            else
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    final.Add(BeginCity + ",");
+
+                }
+            }
+            
+            for(int i=0;i<count;i++)
+            {
+                for(int j=i*length;j<length*(i+1 );j++)
+                {
+                   
+                    if (j == length * (i + 1) - 1)
+                        final[i] += answer[j];
+                    else
+                         final[i] += answer[j]+",";
+                }
+            }
+            
+            return final;
+        }
+
+        public List<AirLine> GetRecommend(string BeginCity, string ArriveCity, string Date, List<AirLine> DayAirlines)
+        {
+            List<string> route = arrangeRoute(BeginCity, ArriveCity, Date, DayAirlines);
+            List<AirLine> result = new List<AirLine>();
+            List<List<AirLine>> airlines = new List<List<AirLine>>();
+            int count = route.Count;
+            int max_value = 0;
+            int Local = 0;
+            for (int i =0; i < count; i++)
+            {
+                int final_value = 0;
+                string[] citys = route[i].Split(',');
+                airlines.Add(MostValueAirlines(citys, Date, DayAirlines));
+            
+            }
+            foreach(List<AirLine> airLine in airlines)
+            {
+                int final_value = 0;
+                for(int i=0;i<airLine.Count;i++)
+                {
+                    final_value += airLine[i].getValue();
+
+                }
+                if (max_value < final_value)
+                {
+                    max_value = final_value;
+                    Local = airlines.IndexOf(airLine);
+                }
+            }
+            result = airlines[Local];
+            return result;
+        }
+        public List<AirLine> MostValueAirlines(string[] citys,string date,List<AirLine> DayAirlines)
+        {
+            int count = citys.Length-1;
+            List<AirLine> airLines = new List<AirLine>();
+            List<AirLine> results = new List<AirLine>();
+            List<int> values = new List<int>();
+            List<int[]> numbers = new List<int[]>();
+            int[] times = new int[count];
+            int[] tempo = new int[count];
+            times[0] = 0;
+            int num = 0;
+            for (int i=0;i<count;i++)
+            {
+                if (i + 1 <= count)
+                {
+                    foreach (AirLine airline in DayAirlines)
+                    {
+                        if (airline.begincity.Equals(citys[i]) && airline.arrivecity.Equals(citys[i + 1]) && airline.date.Equals(date))
+                        {
+                            airLines.Add(airline); num++;
+                        }
+                    }
+                    
+                }
+                if(i+1<count)
+                times[i+1] = num;
+                
+            }
+            
+            for (int i= 0; i < count;i++)
+            {
+                tempo[i] = 0;
+            }
+            tempo[0] = -1;
+            while(tempo[count-1]<=num-1)
+            {
+                int value = 0;
+                List<AirLine> tempo_airlines = new List<AirLine>();
+                int[] saveNumber = new int[count];
+                tempo[0] += 1;
+                bool isSmaller = true;
+                for(int i=0;i<count;i++)
+                {
+                    if (i + 1 < count)
+                    {
+                        if (tempo[i] == times[i + 1])
+                        {
+                            tempo[i] = 0;
+                            tempo[i + 1] += 1;
+                        }
+                    }
+                   
+                }
+                if (tempo[count - 1]+times[count-1] >= num)
+                    break;
+                for(int i=0;i<count;i++)
+                {
+                    saveNumber[i] = times[i] + tempo[i];
+                    
+                }
+                numbers.Add(saveNumber);
+                for(int i=0;i<count;i++)
+                {
+                    tempo_airlines.Add(airLines[tempo[i]+times[i]]);
+                }
+                
+                for (int i=0;i<count;i++)
+                {
+                    if (i+1<count)
+                    {
+                        if (AirLine.MinusTime(tempo_airlines[i].arrivetime, tempo_airlines[i + 1].begintime) > 0)
+                        {
+                            isSmaller = false;
+                        }
+                    }
+                }
+                if (isSmaller == false)
+                    break;
+                for(int i=0;i<count;i++)
+                {
+                    value += tempo_airlines[i].getValue();
+                }
+                values.Add(value);
+               
+            }
+            int maxLocal = 0;
+            int max = -10000;
+            for(int i=0;i<values.Count;i++)
+            {
+                if (values[i] > max)
+                    max = values[i];
+            }
+            maxLocal = values.IndexOf(max);
+            if(maxLocal==-1)
+            {
+                return results;
+            }
+            for(int i=0;i<count;i++)
+            {
+                results.Add(airLines[numbers[maxLocal][i]]);
+            }
+            return results;
+
+        }
         //查询一个城市所有发出的航线
         public List<AirLine> QueryAirlineBeginCity(string BeginCity, string Date)
         {

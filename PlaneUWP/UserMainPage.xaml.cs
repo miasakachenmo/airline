@@ -3,12 +3,14 @@ using System;
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -53,14 +55,42 @@ namespace PlaneUWP
             param.type = ResultPage.PageType.UserSearchPage;
             App.Instance.JumpTo("ResultPage", param);
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
 
+            if(BeginCityText.Text==""|ArriveCityText.Text==""|DateText.Text=="")
+            {
+                await new ContentDialog
+                {
+                    Title = "请填写完整信息!",
+                    CloseButtonText = "关闭",
+                }.ShowAsync();
+                return;
+            }
             ResultPage.ResultParam param = new ResultPage.ResultParam();
             param.airLines=new DataBase().QueryAirline(BeginCityText.Text, ArriveCityText.Text, DateText.Text);
+            bool NeedRecommand = true;
+            foreach(var anairline in param.airLines)
+                if (!(anairline._status.iscanceled|anairline.remainticket==0))//两种不能去的情况
+                    NeedRecommand = false;
             param.type = ResultPage.PageType.UserSearchPage;
+            if (!NeedRecommand)
+            {
+                param.type = ResultPage.PageType.UserSearchPage;
+                App.Instance.JumpTo("ResultPage", param);
+            }
+            else
+            {
+                var Dialog = new MessageDialog("无可用航班,是否需要智能推荐?");
+               
+                Dialog.Commands.Add(new UICommand("好的", (c) => {
+                    Debug.Print("调用了智能推荐!");
+                    return;  }));
+                Dialog.Commands.Add(new UICommand("不用了", (c) => { return; }));
+                await Dialog.ShowAsync();
 
-            App.Instance.JumpTo("ResultPage",param);
+            }
+           
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -81,8 +111,17 @@ namespace PlaneUWP
             Messages.Clear();
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
+            if (AirLineNum.Text == "")
+            {
+                await new ContentDialog
+                {
+                    Title="请填写航班号!",
+                    CloseButtonText = "关闭",
+                }.ShowAsync();
+                return;
+            }
             string airlinenum = AirLineNum.Text;
             ResultPage.ResultParam param = new ResultPage.ResultParam();
             param.airLines = DataBase.Instence.QueryAirlineByAirLineNum(airlinenum);

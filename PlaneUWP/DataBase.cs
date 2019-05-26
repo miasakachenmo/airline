@@ -34,6 +34,12 @@ namespace PlaneUWP
         string ConnectString = "server=119.23.219.88;port=3306;user=airline;password=123;database=airline;";
 
 
+        public bool ChangeAirline(AirLine airLine)
+        {
+            string str = $"update airline set remainticket={airLine._remainticket}, price={airLine.price} where airlinenum=\"{airLine.airlinenum}\" and date=\"{airLine.date}\"";
+            ExecuteNoQuery(str);
+            return true;
+        }
         public void DelAllMessage(string UserId)
         {
             string Exe = $"delete from message where userid=\"{UserId}\"";
@@ -306,26 +312,29 @@ namespace PlaneUWP
         }
 
         //放票
-        public void GiveTicket(string AirlineId, string Date)
+        public int  GiveTicket(string AirlineId, string Date,int TicketNum=1)
         {
-            string str = $"select * from buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and status=1 order by num limit 1";
+            string str = $"select * from buyticket where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and status=1 order by num limit {TicketNum}";
             mySqlDataReader = Execute(str);
-            if(mySqlDataReader.Read())
+            int Count = 0;
+            List<string> Users = new List<string>();
+            while (mySqlDataReader.Read())
             {
-                string id = mySqlDataReader.GetString("userid");
-                mySqlDataReader.Close();
-                string tempo_1= $"update buyticket set status='0' where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{id}\"";
+                Count++;
+                Users.Add(mySqlDataReader.GetString("userid"));
+            }
+            mySqlDataReader.Close();
+            foreach(string id in Users)
+            {
+                string tempo_1 = $"update buyticket set status='0' where airlinenum=\"{AirlineId}\"and date=\"{Date}\"and userid=\"{id}\"";
                 ExecuteNoQuery(tempo_1);
                 string tempo_2 = $"update airline set remainticket=remainticket-1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
                 ExecuteNoQuery(tempo_2);
                 string tempo_messsage = $"航班号：{AirlineId} 时间：{Date}抢票成功";
-                AddMessage(new List<string>() {id }, tempo_messsage);
+                AddMessage(new List<string>() { id }, tempo_messsage);
             }
-            else
-            {
-                mySqlDataReader.Close();
-                return;
-            }
+            return Count;
+            
         }
        
 
@@ -336,12 +345,12 @@ namespace PlaneUWP
             ExecuteNoQuery(tempo_1);
             string tempo_2 = $"update airline set remainticket=remainticket+1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
             ExecuteNoQuery(tempo_2);
-            string commend = $"select * from airline where remainticket=1 and airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            string commend = $"select * from airline where remainticket>=1 and airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
             mySqlDataReader = Execute(commend);
             if(mySqlDataReader.Read())
             {
                 mySqlDataReader.Close();
-                GiveTicket(AirlineId, Date);
+                GiveTicket(AirlineId, Date,1);
             }
             else
             {
@@ -354,7 +363,7 @@ namespace PlaneUWP
         public List<string> GetMessage(string Userid)
         {
             List<string> Temp = new List<string>();
-            string sqlstr = $"select * from message where userid=\"{Userid}\"";
+            string sqlstr = $"select * from message where userid=\"{Userid}\" order by Id ";
             mySqlDataReader = Execute(sqlstr);
 
        //   for(int i=0;i<5;i++)

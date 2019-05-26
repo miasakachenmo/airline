@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -136,14 +137,37 @@ namespace PlaneUWP
         private async void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             AirLine temp = (AirLine)e.ClickedItem;
-            var contentDialog = new ContentDialog()
+            var SelectDialog = new MessageDialog("选择操作");
+            SelectDialog.Commands.Add(new UICommand("信息维护",
+                async (c) =>
             {
-                CloseButtonText = "关闭",
-                Title = $"输入你希望对{temp.date}航班{temp.airlinenum}进行的操作",
-                FullSizeDesired = false
-            };
-            contentDialog.Content = new AdminOp(contentDialog, temp);
-            await contentDialog.ShowAsync();
+                var contentDialog = new ContentDialog()
+                {
+                    CloseButtonText = "关闭",
+                    
+                    FullSizeDesired = false
+                };
+                 contentDialog.Content = new ManageDialog(contentDialog, temp);
+                await contentDialog.ShowAsync();
+            }));
+
+
+            SelectDialog.Commands.Add(new UICommand("延误/取消", 
+               async (c) => 
+                {
+
+                var contentDialog = new ContentDialog()
+                {
+                    CloseButtonText = "关闭",
+                    Title = $"输入你希望对{temp.date}航班{temp.airlinenum}进行的操作",
+                    FullSizeDesired = false
+                };
+                contentDialog.Content = new AdminOp(contentDialog, temp);
+                await contentDialog.ShowAsync();
+            }));
+            await SelectDialog.ShowAsync();
+
+            
         }
     }
 }

@@ -176,7 +176,6 @@ namespace PlaneUWP
                 contentDialog.Content = new AdminOp(contentDialog, temp);
                 await contentDialog.ShowAsync();
             }
-         
         }
 
 

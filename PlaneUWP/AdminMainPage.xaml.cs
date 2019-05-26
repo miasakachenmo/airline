@@ -38,11 +38,37 @@ namespace PlaneUWP
             await temp.ShowAsync();
 
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
             ResultPage.ResultParam param = new ResultPage.ResultParam();
-            
+
+            if (BeginCityText.Text == "" | ArriveCityText.Text == "" | DateText.Text == "")
+            {
+                await new ContentDialog
+                {
+                    Title = "请填写完整信息!",
+                    CloseButtonText = "关闭",
+                }.ShowAsync();
+                return;
+            }
             param.airLines = DataBase.Instence.QueryAirline(BeginCityText.Text, ArriveCityText.Text, DateText.Text);
+            param.type = ResultPage.PageType.AdminSearchPage;
+            DataPresenter.Navigate(Type.GetType("PlaneUWP.ResultPage_AdminMain"), param);
+        }
+        private async void Button_Click2(object sender, RoutedEventArgs e)
+        {
+            ResultPage.ResultParam param = new ResultPage.ResultParam();
+
+            if (AirLineNum.Text=="")
+            {
+                await new ContentDialog
+                {
+                    Title = "请填写航班号!",
+                    CloseButtonText = "关闭",
+                }.ShowAsync();
+                return;
+            }
+            param.airLines = DataBase.Instence.QueryAirlineByAirLineNum(AirLineNum.Text);
             param.type = ResultPage.PageType.AdminSearchPage;
             DataPresenter.Navigate(Type.GetType("PlaneUWP.ResultPage_AdminMain"), param);
         }

@@ -46,8 +46,14 @@ namespace PlaneUWP
         }
         public void AdminSearchPage()
         {
+
             AButton.Content = "取消航班";
             AButton.Click += async (sender, e) => {
+                if(airLine._status.iscanceled)
+                {
+                    father.Hide();
+                    return;
+                }
                 DataBase.Instence.AirlineCanael(airLine);
                 father.Hide();
                 await new ContentDialog()
@@ -57,11 +63,55 @@ namespace PlaneUWP
                     FullSizeDesired = false
                 }.ShowAsync();
                  };
+
+
             BButton.Content = "延误";
             BButton.Click += async (sender, e) => {
-                if (Input.Text == "")
+                if (airLine._status.iscanceled)
+                {
+                    father.Hide();
+                    await new ContentDialog()
+                    {
+                        CloseButtonText = "关闭",
+                        Title = $"您不能延误一个已经取消的航班",
+                        FullSizeDesired = false
+                    }.ShowAsync();
                     return;
-                DataBase.Instence.AirlineLate(airLine,Input.Text); father.Hide();
+                }
+                if (Input.Text == "")
+                {
+                    
+
+                    father.Hide();
+                    await new ContentDialog()
+                    {
+                        CloseButtonText = "关闭",
+                        Title = $"请输入延误时间(分钟)",
+                        FullSizeDesired = false
+                    }.ShowAsync();
+                    return;
+                }
+                try
+                {
+                    var a= int.Parse(Input.Text);
+                    if(a<0)
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch
+                {
+                    father.Hide();
+                    await new ContentDialog()
+                    {
+                        CloseButtonText = "关闭",
+                        Title = $"时间格式有误",
+                        FullSizeDesired = false
+                    }.ShowAsync();
+                    return;
+                }
+            DataBase.Instence.AirlineLate(airLine,Input.Text);
+                father.Hide();
                 await new ContentDialog()
                 {
                     CloseButtonText = "关闭",

@@ -28,6 +28,10 @@
                 <TextBlock Text="到" FontSize="20"  Margin="5,0,5,0" HorizontalAlignment="Center"></TextBlock>
                 <AutoSuggestBox  Name="ArriveCityText" PlaceholderText="目的城市" FontSize="40dip" BorderThickness="2"   Width="100"></AutoSuggestBox>
                 <Button Click="Button_Click" Height="34" Width="90" Margin="5,0,5,0" Content="搜索" FontSize="13dip" HorizontalAlignment="Center" ></Button>
+                <TextBlock Text="或者" TextAlignment="Center"></TextBlock>
+                <AutoSuggestBox  Name="AirLineNum" PlaceholderText="航班号" FontSize="40dip" BorderThickness="2"   Width="100"></AutoSuggestBox>
+                <Button Click="Button_Click2" Height="34" Width="90" Margin="5,0,5,0" Content="航班号搜索" FontSize="13dip" HorizontalAlignment="Center" ></Button>
+
                 <Button Click="Create_AirLine" Height="34"  Width="90" Margin="5,20,5,0" Content="创建航线" HorizontalAlignment="Center"></Button>
             </StackPanel>
         </StackPanel>

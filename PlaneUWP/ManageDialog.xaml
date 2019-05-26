@@ -1,0 +1,55 @@
+﻿<UserControl
+    x:Class="PlaneUWP.ManageDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PlaneUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+d:DesignHeight="700"
+    d:DesignWidth="400">
+
+    <Grid>
+        <StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="航空公司"></TextBlock>
+                <TextBox   IsEnabled="False" Text="{x:Bind Mode=TwoWay, Path=airline.comp}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="航班号"></TextBlock>
+                <TextBox IsEnabled="False" Text="{x:Bind Mode=TwoWay, Path=airline.airlinenum}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="起飞时间"></TextBlock>
+                <TextBox IsEnabled="False"  Text="{x:Bind Mode=TwoWay, Path=airline.begintime}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="降落时间"></TextBlock>
+                <TextBox  IsEnabled="False" Text="{x:Bind Mode=TwoWay, Path=airline.arrivetime}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="起始城市"></TextBlock>
+                <TextBox IsEnabled="False" Text="{x:Bind Mode=TwoWay, Path=airline.begincity}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="到达城市"></TextBlock>
+                <TextBox IsEnabled="False" Text="{x:Bind Mode=TwoWay, Path=airline.arrivecity}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="余票"></TextBlock>
+                <TextBox  Text="{x:Bind Mode=TwoWay, Path=airline.remainticket}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="20" VerticalAlignment="Center" Text="价格"></TextBlock>
+                <TextBox  Text="{x:Bind Mode=TwoWay, Path=airline.price}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Margin="0,10,0,0" Height="40" Orientation="Horizontal">
+                <TextBlock Width="90" Margin="10,0,10,0" FontSize="13" VerticalAlignment="Center" Text="经停(没有不填)"  ></TextBlock>
+                <TextBox IsEnabled="False" Text="{x:Bind Mode=TwoWay, Path=airline.cross}"  BorderThickness="2" BorderBrush="DodgerBlue" FontSize="20"   VerticalAlignment="Center" Width="280" ></TextBox>
+            </StackPanel>
+            <Button Click="Button_Click" FontSize="20" Margin="0,10,0,0" Width="150" HorizontalAlignment="Center" Content="提交" Foreground="White" Background="DodgerBlue"></Button>
+            <TextBlock Name="TipsText" TextWrapping="Wrap"   FontSize="21" Foreground="DarkCyan" TextAlignment="Center" Text="航班的修改是受限的"></TextBlock>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

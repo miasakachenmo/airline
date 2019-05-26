@@ -14,6 +14,7 @@ namespace PlaneUWP
         public static int MinusTime(string timestr1,string timestr2)
         {
             
+            
             var Result1 = Regex.Match(timestr1, "\\d{2}");
             var Result2 = Regex.Match(timestr2, "\\d{2}");
 
@@ -42,6 +43,20 @@ namespace PlaneUWP
             price = 0;
             status = new Status() { father = this,_islate=false,iscanceled=false,newtime="" };
             
+        }
+        public AirLine(AirLine a)
+        {
+            comp = a.comp;
+            airlinenum = a.airlinenum;
+            begintime = a.begintime;
+            arrivetime = a.arrivetime;
+            begincity = a.begincity;
+            arrivecity = a.arrivecity;
+            _remainticket = a._remainticket;
+            date = a.date;
+            price = a.price;
+            status = new Status() { father = this, _islate = a._status._islate, _iscanceled = a._status._iscanceled, newtime = a._status._newtime };
+
         }
         //飞行时间:分钟
         public int flytime
@@ -82,7 +97,20 @@ namespace PlaneUWP
             }
         }
         public string cross;
-        public int price;
+        public int _price;
+        public int price
+        {
+            get
+            {
+                return _price;
+            }
+            set
+            {
+                _price = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("price"));
+
+            }
+        }
         public string begincity;
         public string arrivecity;
 
@@ -145,6 +173,10 @@ namespace PlaneUWP
                 else
                     return "正常";
             }
+            set
+            {
+
+            }
         }
         public class Status
         {
@@ -155,11 +187,39 @@ namespace PlaneUWP
                 {
                     _islate = value;
                     if(father!=null)
-                        father.PropertyChanged(father, new PropertyChangedEventArgs("islatestr"));
+                        father.PropertyChanged(father, new PropertyChangedEventArgs("StatusStr"));
                 }
             }
-            public bool iscanceled=false;
-            public string newtime="";
+            public bool iscanceled
+            {
+                get
+                {
+                    return _iscanceled;
+                }
+                set
+                {
+                    _iscanceled = value;
+                    if (father != null)
+                        father.PropertyChanged(father, new PropertyChangedEventArgs("StatusStr"));
+                }
+            }
+            public bool _iscanceled=false;
+            public string _newtime="";
+            public string newtime
+            {
+                get
+                {
+                    return _newtime;
+
+                }
+                set
+                {
+                    _newtime = value;
+                    if (father != null)
+                        father.PropertyChanged(father, new PropertyChangedEventArgs("StatusStr"));
+                }
+            }
+
         }
     }
 

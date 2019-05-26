@@ -96,7 +96,7 @@ namespace PlaneUWP
         private  void Button_Click(object sender, RoutedEventArgs e)
         {
             string UserName = UserNameInput.Text;
-            string PassWord = PassWordInput.Text;
+            string PassWord = PassWordInput.Password;
             Login(UserName, PassWord);
             
             

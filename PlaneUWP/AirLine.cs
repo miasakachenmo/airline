@@ -22,7 +22,7 @@ namespace PlaneUWP
             int H2 = int.Parse(timestr2.Split(":")[0]);
             int M1 = int.Parse(timestr1.Split(":")[1]);
             int M2 = int.Parse(timestr2.Split(":")[1]);
-            return (H1 - H2) * 60 + (M2 - M1);
+            return (H1 - H2) * 60 + (M1 - M2);
 
         }
 

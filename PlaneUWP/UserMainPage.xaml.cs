@@ -85,7 +85,23 @@ namespace PlaneUWP
                
                 Dialog.Commands.Add(new UICommand("好的", (c) => {
                     Debug.Print("调用了智能推荐!");
-                    return;  }));
+                    try
+                    {
+                        param.airLines = DataBase.Instence.GetRecommend(BeginCityText.Text, ArriveCityText.Text, DateText.Text, DataBase.Instence.GetDayAirLines(DateText.Text));
+
+
+                    }
+                    catch(StackOverflowException)
+                    {
+                        param.airLines = new List<AirLine>();
+                    }
+                    catch
+                    {
+                        param.airLines = new List<AirLine>();
+                    }
+                    param.type = ResultPage.PageType.UserSearchPage;
+                    App.Instance.JumpTo("ResultPage", param);
+                    return; }));
                 Dialog.Commands.Add(new UICommand("不用了", (c) => { return; }));
                 await Dialog.ShowAsync();
 

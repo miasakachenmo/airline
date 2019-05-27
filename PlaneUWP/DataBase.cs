@@ -146,9 +146,14 @@ namespace PlaneUWP
             }
         }
         public static List<string> answer = new List<string>();
+        public static int times = 0;
+        
         public List<string> GetRoute(string BeginCity,string ArriveCity,string Date, List<AirLine> DayAirlines)
         {
-            
+
+            times++;
+            if (times > 1000)
+                return new List<string>();
             List<string> city_begin = new List<string>();
             List<string> city_arrive = new List<string>();
             
@@ -196,6 +201,7 @@ namespace PlaneUWP
                     
                 }
             }
+
             if(answer.Count>0)
             {
                 return answer;
@@ -207,6 +213,7 @@ namespace PlaneUWP
                     GetRoute(city_left, ArriveCity, Date, DayAirlines);
                     
                 }
+
                 
                          
             }
@@ -357,16 +364,47 @@ namespace PlaneUWP
                 
                 for (int i=0;i<count;i++)
                 {
+                    if (tempo_airlines[i].remainticket < 0)
+                        isSmaller = false;
                     if (i+1<count)
                     {
-                        if (AirLine.MinusTime(tempo_airlines[i].arrivetime, tempo_airlines[i + 1].begintime) > 0)
+                        bool a = (AirLine.MinusTime(tempo_airlines[i].arrivetime, tempo_airlines[i + 1].begintime) > 0);
+                        if (a)
                         {
                             isSmaller = false;
+                        }
+                        else
+                        {
+                            int b=10000;
+                        }
+
+                    }
+                }
+                if(isSmaller)
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i + 1 < count)
+                        {
+                            bool a = AirLine.MinusTime(tempo_airlines[i].arrivetime, tempo_airlines[i + 1].begintime) > 0;
+                            if (a)
+                            {
+                                isSmaller = false;
+                            }
+                            else
+                            {
+                                int b = 10000;
+                            }
+
                         }
                     }
                 }
                 if (isSmaller == false)
-                    break;
+                {
+                    values.Add(int.MinValue);
+                    continue;
+                }
+                    
                 for(int i=0;i<count;i++)
                 {
                     value += tempo_airlines[i].getValue();
@@ -573,7 +611,7 @@ namespace PlaneUWP
             ExecuteNoQuery(tempo_1);
             string tempo_2 = $"update airline set remainticket=remainticket+1 where airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
             ExecuteNoQuery(tempo_2);
-            string commend = $"select * from airline where remainticket>=1 and airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
+            string commend = $"select * from airline where remainticket=1 and airlinenum=\"{AirlineId}\"and date=\"{Date}\"";
             mySqlDataReader = Execute(commend);
             if(mySqlDataReader.Read())
             {
